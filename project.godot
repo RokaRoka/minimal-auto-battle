@@ -21,11 +21,19 @@ _global_script_class_icons={
 [application]
 
 config/name="MinimalAutoBattle"
+run/main_scene="res://Game.tscn"
 config/icon="res://icon.png"
+
+[display]
+
+window/size/resizable=false
 
 [rendering]
 
 quality/driver/driver_name="GLES2"
+quality/2d/use_nvidia_rect_flicker_workaround=true
+quality/intended_usage/framebuffer_allocation=1
 vram_compression/import_etc=true
 vram_compression/import_etc2=false
+environment/default_clear_color=Color( 0, 0, 0, 1 )
 environment/default_environment="res://default_env.tres"
