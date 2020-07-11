@@ -1,6 +1,7 @@
 extends Sprite
 
 onready var path2D = get_tree().current_scene.get_node("Grid/Path")
+onready var destMark = get_tree().current_scene.get_node("Grid/DestMark")
 var grid: Grid
 
 var cellPos = Vector2(0, 0)
@@ -8,6 +9,13 @@ var cellPos = Vector2(0, 0)
 var moving = false
 var path = []
 var moveSpeed = 64
+
+var destinations = [null]
+
+export var moveRange = 5
+
+func _ready():
+	destMark.hide()
 
 func _process(delta):
 	if moving:
@@ -18,20 +26,31 @@ func _process(delta):
 		if position.distance_to(path[0]) < 0.05:
 			path.pop_front()
 
+## DEPRECATED ##
 func gotoCellv(cellPosv: Vector2):
 	#we are in world space, we need to change that
 	path = grid.getPathv(position, cellPosv)
 	path2D.points = path
 	moving = true
 
+func setDestination(cellPosv: Vector2):
+	destinations[0] = grid.getPathv(position, cellPosv)
+	destMark.position = destinations[0].back()
+	destMark.show()
+
 func moveComplete():
 	moving = false
 	path2D.points = []
 	cellPos = grid.getGridPos(position)
 
-func _input(event):
-	if event is InputEventMouseButton:
-		if event.pressed and event.button_index == BUTTON_LEFT:
-			print("clicky click")
-			if !moving:
-				gotoCellv(event.position)
+func takeTurn():
+	if destinations.empty() or destinations[0] == null:
+		return
+	for i in range(0, moveRange + 1):
+		var dest_node = destinations.front().pop_front()
+		if dest_node != null:
+			path.append(dest_node)
+		else:
+			break
+	path2D.points = path
+	moving = true
