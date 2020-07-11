@@ -26,6 +26,12 @@ func _ready():
 	astar.reserve_space(cellAmount.x * cellAmount.y)
 	for i in range(0, cellAmount.y):
 		for j in range(0, cellAmount.x):
+			#check if there is a cell here, otherwize we skip
+			var cell = tileMap.get_cell(j + gridRect.position.x, i + gridRect.position.y)
+			if cell == tileMap.INVALID_CELL:
+				print("Invalid :(")
+				continue
+			
 			var id = j + (i * cellAmount.x)
 			var cellPos = (gridRect.position + Vector2(j + 0.5, i + 0.5)) * tileMap.cell_size
 			astar.add_point(id, cellPos)
@@ -41,10 +47,8 @@ func _ready():
 				astar.connect_points(id - cellAmount.x, id)
 	
 	# astar test
-	var pathPlayer = astar.get_id_path(0, 63)
-	print("path from top left to botton right! Points: ", pathPlayer)
-	#$Units/Unit
-	
+#	var pathPlayer = astar.get_id_path(0, 63)
+#	print("path from top left to botton right! Points: ", pathPlayer)
 	# assign Units to grid
 	for unit in $Units.get_children():
 		addUnit(unit)
@@ -68,14 +72,16 @@ func getPathv(cellPosv1, cellPosv2):
 	#return blank array for out of bound paths
 	if !gridRect.has_point(cellPos1) or !gridRect.has_point(cellPos2):
 		return []
+	if tileMap.get_cell(cellPos1.x, cellPos1.y) == tileMap.INVALID_CELL:
+		return []
+	if tileMap.get_cell(cellPos2.x, cellPos2.y) == tileMap.INVALID_CELL:
+		return []
+	
 	cellPos1 -= gridRect.position
 	cellPos2 -= gridRect.position
 	var astarId1 = cellPos1.x + (cellPos1.y * gridRect.size.x)
 	var astarId2 = cellPos2.x + (cellPos2.y * gridRect.size.x)
-	return astar.get_point_path(astarId1, astarId2)
-
-#func screenToGridCell(screenPos):
-#	pass
+	return Array(astar.get_point_path(astarId1, astarId2))
 
 func getTileType(id):
 	return tileMap.tile_set.tile_get_name(id)
