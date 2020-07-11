@@ -27,6 +27,7 @@ func gotoCellv(cellPosv: Vector2):
 func moveComplete():
 	moving = false
 	path2D.points = []
+	cellPos = grid.getGridPos(position)
 
 func _input(event):
 	if event is InputEventMouseButton:

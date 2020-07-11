@@ -29,7 +29,10 @@ func _ready():
 			#check if there is a cell here, otherwize we skip
 			var cell = tileMap.get_cell(j + gridRect.position.x, i + gridRect.position.y)
 			if cell == tileMap.INVALID_CELL:
-				print("Invalid :(")
+				continue
+			var tiletype = getTileName(cell)
+			if !tiletype == "Walkable":
+				print("Non walkable :0")
 				continue
 			
 			var id = j + (i * cellAmount.x)
@@ -72,9 +75,18 @@ func getPathv(cellPosv1, cellPosv2):
 	#return blank array for out of bound paths
 	if !gridRect.has_point(cellPos1) or !gridRect.has_point(cellPos2):
 		return []
-	if tileMap.get_cell(cellPos1.x, cellPos1.y) == tileMap.INVALID_CELL:
+	
+	var cell = tileMap.get_cell(cellPos1.x, cellPos1.y)
+	if cell == tileMap.INVALID_CELL:
 		return []
-	if tileMap.get_cell(cellPos2.x, cellPos2.y) == tileMap.INVALID_CELL:
+	
+	cell = tileMap.get_cell(cellPos2.x, cellPos2.y)
+	if cell == tileMap.INVALID_CELL:
+		return []
+	
+	#destination has to be walkable!
+	var tiletype = getTileName(cell)
+	if !tiletype == "Walkable":
 		return []
 	
 	cellPos1 -= gridRect.position
@@ -83,5 +95,9 @@ func getPathv(cellPosv1, cellPosv2):
 	var astarId2 = cellPos2.x + (cellPos2.y * gridRect.size.x)
 	return Array(astar.get_point_path(astarId1, astarId2))
 
-func getTileType(id):
+func getGridPos(posv):
+	return tileMap.world_to_map(posv) - gridRect.position
+
+func getTileName(id):
 	return tileMap.tile_set.tile_get_name(id)
+
