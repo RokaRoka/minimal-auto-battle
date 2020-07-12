@@ -80,6 +80,16 @@ func getPathv(cellPosv1, cellPosv2):
 	var astarId2 = cellPos2.x + (cellPos2.y * gridRect.size.x)
 	return Array(astar.get_point_path(astarId1, astarId2))
 
+func getPath(cellPos1, cellPos2):
+	if !validPath(cellPos1, cellPos2):
+		return []
+	
+	cellPos1 -= gridRect.position
+	cellPos2 -= gridRect.position
+	var astarId1 = cellPos1.x + (cellPos1.y * gridRect.size.x)
+	var astarId2 = cellPos2.x + (cellPos2.y * gridRect.size.x)
+	return Array(astar.get_point_path(astarId1, astarId2))
+
 func getGridPos(posv):
 	return tileMap.world_to_map(posv) - gridRect.position
 
@@ -89,7 +99,9 @@ func getTileName(id):
 func validPathv(cellPosv1, cellPosv2):
 	var cellPos1 = tileMap.world_to_map(cellPosv1)
 	var cellPos2 = tileMap.world_to_map(cellPosv2)
-	
+	return validPath(cellPos1, cellPos2)
+
+func validPath(cellPos1, cellPos2):	
 	#return blank array for out of bound paths
 	if !gridRect.has_point(cellPos1) or !gridRect.has_point(cellPos2):
 		return false
@@ -106,5 +118,11 @@ func validPathv(cellPosv1, cellPosv2):
 	var tiletype = getTileName(cell)
 	if !tiletype == "Walkable":
 		return false
-	
 	return true
+
+func getTilesOfType(name):
+	# first, get the id of name
+	var id = tileMap.tile_set.find_tile_by_name(name)
+	if id == null:
+		return null
+	return tileMap.get_used_cells_by_id(id)
