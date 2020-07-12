@@ -14,6 +14,8 @@ var destinations = [null]
 
 export var moveRange = 5
 
+signal turn_done
+
 func _ready():
 	destMark.hide()
 
@@ -42,6 +44,7 @@ func moveComplete():
 	moving = false
 	path2D.points = []
 	cellPos = grid.getGridPos(position)
+	emit_signal("turn_done")
 
 func takeTurn():
 	if destinations.empty() or destinations[0] == null:
