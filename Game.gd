@@ -19,15 +19,16 @@ func prepTurn():
 	turn = "prep"
 	turnUIAnim.stop()
 	turnUIAnim.play("Prep")
-	prepUI.show()
+	#prepUI.show()
 
 func takePlayerTurn():
 	turn = "player"
 	turnUIAnim.stop()
 	turnUIAnim.play("PlayerTurn")
-	prepUI.hide()
-	turnQueue = get_tree().get_nodes_in_group("player")
-	turnQueue[0].takeTurn()
+	#prepUI.hide()
+#	turnQueue = get_tree().get_nodes_in_group("player")
+	testUnit.connect("turn_done", self, "prepTurn", [], CONNECT_ONESHOT)
+	testUnit.takeTurn()
 
 func _unhandled_input(event):
 	if event is InputEventMouseButton:
