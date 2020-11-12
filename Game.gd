@@ -1,5 +1,8 @@
 extends Node2D
 
+# branched scenes
+var unitTscn = preload("res://Unit.tscn")
+
 onready var grid = $Grid
 onready var testUnit = $Grid/Units/Unit
 onready var turnUIAnim = $UI/TakeTurn/AnimationPlayer
@@ -14,6 +17,7 @@ var castles = []
 func _ready():
 	castles = grid.getTilesOfType("Castle")
 	prepTurn()
+	$UI/Bench/Panel/UnitSlot1/ShopUnit.connect("dropped", self, "dropShopUnit")
 
 func prepTurn():
 	turn = "prep"
@@ -40,6 +44,17 @@ func _unhandled_input(event):
 			if turn == "prep":
 				takePlayerTurn()
 
+func dropShopUnit(draggable):
+	#if we drop a unit on an empty space, spawn a unit
+	var mousePos = get_global_mouse_position()
+	#check if its a valid space
+	var cellId = grid.getCellId(mousePos)
+	draggable.hide()
+	#create unit and add to grid
+	var newUnit = unitTscn.instance()
+	newUnit.position = grid.getSnappedPos(mousePos) + grid.tileMap.cell_size/2
+	grid.addUnit(newUnit)
+	$Grid/Units.add_child(newUnit)
 
 func _on_AtttackBtn_pressed():
 	print("bla;fbaiwueskf!")

@@ -7,6 +7,10 @@ onready var tileMap = $TileMap
 ## TILEMAP RULES ALL ##
 
 #grids (or uh, just one grid)
+
+# Grid is offset and a different size than the rest of the tilemap
+# This is important for the unit grid and astar
+# i.e. [3, 5] on the tilemap is [0, 0] for the grid
 var gridRect: Rect2
 
 var unitGrid = []
@@ -66,6 +70,7 @@ func addUnit(var unit):
 func getUnit(var cellPos):
 	return unitGrid[cellPos.x + (10 * cellPos.y)]
 
+#takes in world based positions [32, 64] or [78.5, 54.2]
 func getPathv(cellPosv1, cellPosv2):
 	# MORE LIKe ASSTAR AMIRITE LOL
 	var cellPos1 = tileMap.world_to_map(cellPosv1)
@@ -80,6 +85,7 @@ func getPathv(cellPosv1, cellPosv2):
 	var astarId2 = cellPos2.x + (cellPos2.y * gridRect.size.x)
 	return Array(astar.get_point_path(astarId1, astarId2))
 
+#takes in cell based positions [0, 1] or [4, 3] etc
 func getPath(cellPos1, cellPos2):
 	if !validPath(cellPos1, cellPos2):
 		return []
@@ -93,6 +99,13 @@ func getPath(cellPos1, cellPos2):
 func getGridPos(posv):
 	return tileMap.world_to_map(posv) - gridRect.position
 
+func getSnappedPos(pos):
+	return tileMap.world_to_map(pos) * tileMap.cell_size
+
+func getCellId(pos):
+	var cellPos = tileMap.world_to_map(pos)# - gridRect.position
+	return tileMap.get_cellv(cellPos)
+
 func getTileName(id):
 	return tileMap.tile_set.tile_get_name(id)
 
@@ -101,7 +114,7 @@ func validPathv(cellPosv1, cellPosv2):
 	var cellPos2 = tileMap.world_to_map(cellPosv2)
 	return validPath(cellPos1, cellPos2)
 
-func validPath(cellPos1, cellPos2):	
+func validPath(cellPos1, cellPos2):
 	#return blank array for out of bound paths
 	if !gridRect.has_point(cellPos1) or !gridRect.has_point(cellPos2):
 		return false
