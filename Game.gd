@@ -24,21 +24,33 @@ func prepTurn():
 	turnUIAnim.stop()
 	turnUIAnim.play("Prep")
 	#prepUI.show()
+	$UI/Bench.show()
+	$UI/Shop.show()
 
 func takePlayerTurn():
 	turn = "player"
 	turnUIAnim.stop()
 	turnUIAnim.play("PlayerTurn")
 	#prepUI.hide()
-#	turnQueue = get_tree().get_nodes_in_group("player")
-	testUnit.connect("turn_done", self, "prepTurn", [], CONNECT_ONESHOT)
-	testUnit.takeTurn()
+	$UI/Bench.hide()
+	$UI/Shop.hide()
+	turnQueue = get_tree().get_nodes_in_group("Player")
+	for i in range(0, turnQueue.size()):
+		var unit = turnQueue[i]
+		
+		# units that go last bring it back to "prepTurn"
+		if unit == turnQueue.back():
+			unit.connect("turn_done", self, "prepTurn", [], CONNECT_ONESHOT)
+		else:
+			unit.connect("turn_done", turnQueue[i + 1], "takeTurn", [], CONNECT_ONESHOT)
+	turnQueue.front().takeTurn()
 
 func _unhandled_input(event):
 	if event is InputEventMouseButton:
 		if event.pressed and event.button_index == BUTTON_LEFT:
 			if grid.validPathv(testUnit.position, event.position):
-				testUnit.setDestination(event.position)
+				for unit in get_tree().get_nodes_in_group("Player"):
+					unit.setDestination(event.position)
 	if event is InputEventKey:
 		if event.pressed and event.scancode == KEY_SPACE:
 			if turn == "prep":
