@@ -1,4 +1,5 @@
 extends Sprite
+class_name Unit
 
 onready var path2D = get_tree().current_scene.get_node("Grid/Path")
 onready var destMark = get_tree().current_scene.get_node("Grid/DestMark")
@@ -12,8 +13,16 @@ var moveSpeed = 64
 
 var destinations = [null]
 
+export var hp = 14
+export var atk = 5
+export var def = 5
+export var skl = 5
+export var lck = 5
+export var spd = 5
+
 export var moveRange = 5
 
+signal attack_done
 signal turn_done
 
 func _ready():
@@ -57,3 +66,13 @@ func takeTurn():
 			break
 	path2D.points = path
 	moving = true
+
+func attack(other: Unit):
+	var damage = atk + 8 #plus weapons when we get there lol
+	var hit = (skl * 2) + (lck/2) + 70 
+	var crit = (skl/2) + 5
+	#roll for hit
+	
+	#roll for crit
+	
+	#animation

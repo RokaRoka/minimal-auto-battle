@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Unit.gd" type="Script" id=1]
+[ext_resource path="res://Tiles/nav_test.png" type="Texture" id=2]
+
+[node name="Unit" type="Sprite" groups=[
+"Enemy",
+]]
+modulate = Color( 1, 0.203922, 0.203922, 1 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 16, 16, 16, 16 )
+script = ExtResource( 1 )
