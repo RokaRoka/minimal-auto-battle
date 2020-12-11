@@ -1,5 +1,7 @@
 extends Node
 
+signal combat_done
+
 # UnitProcessor handles any engagements in combat and unit abilities.
 # so yes, FIRE EMBLEM DANCING IS COMBAT
 
@@ -24,12 +26,16 @@ extends Node
 # Combat goes to end state when 1. either unit dies and/or 2. Both units have attacked
 func battle(unit1, unit2):
 	#first animation
+	unit2.get_node("HealthUI").show()
 	unit1.attack(unit2)
 	yield(unit1, "attack_done")
+	unit2.get_node("HealthUI").hide()
 	
 	#next one
+	unit1.get_node("HealthUI").show()
 	unit2.attack(unit1)
 	yield(unit2, "attack_done")
+	unit1.get_node("HealthUI").hide()
 	
 	#resume!
 	emit_signal("combat_done")

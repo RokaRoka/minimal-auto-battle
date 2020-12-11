@@ -477,4 +477,5 @@ position = Vector2( 184, 168 )
 
 [node name="Unit2" parent="Grid/Units" instance=ExtResource( 4 )]
 position = Vector2( 296, 168 )
+affiliation = "Enemy"
 [connection signal="pressed" from="UI/PrepMenu/VBoxContainer/AtttackBtn" to="." method="_on_AtttackBtn_pressed"]

@@ -41,7 +41,8 @@ func _ready():
 			var id = j + (i * cellAmount.x)
 			var cellPos = (gridRect.position + Vector2(j + 0.5, i + 0.5)) * tileMap.cell_size
 			astar.add_point(id, cellPos)
-			print("Id: ", id, " at pos: ", cellPos)
+			#print("Id: ", id, " at pos: ", cellPos)
+			
 			# connecting time... fuck
 			# check behind
 			if astar.has_point(id - 1) and !astar.are_points_connected(id - 1, id):
@@ -64,7 +65,8 @@ func getGridOriginv():
 
 func addUnit(var unit):
 	unit.grid = self
-	unit.cellPos = tileMap.world_to_map(unit.position) - gridRect.position
+	unit.cellPos = tileMap.world_to_map(unit.position)# - gridRect.position
+	print("Adding Unit. Cell Pos : ", unit.cellPos)
 	unitGrid[unit.cellPos.x + (10 * unit.cellPos.y)]
 
 func getUnit(var cellPos):
@@ -97,7 +99,7 @@ func getPath(cellPos1, cellPos2):
 	return Array(astar.get_point_path(astarId1, astarId2))
 
 func getGridPos(posv):
-	return tileMap.world_to_map(posv) - gridRect.position
+	return tileMap.world_to_map(posv)
 
 func getSnappedPos(pos):
 	return tileMap.world_to_map(pos) * tileMap.cell_size
@@ -132,6 +134,59 @@ func validPath(cellPos1, cellPos2):
 	if !tiletype == "Walkable":
 		return false
 	return true
+
+# for when we are attacking enemies
+func getClosestToCellPos(curPos, targetPos):
+	var diff = targetPos.distance_squared_to(curPos)
+	var dirs = [Vector2.UP, Vector2.DOWN, Vector2.LEFT, Vector2.RIGHT]
+	
+	# remove literally unreachable locations
+	for i in range(0, 4):
+		var cell = tileMap.get_cell(targetPos.x + dirs[i].x, targetPos.y + dirs[i].y)
+		var tiletype = getTileName(cell)
+		if !tiletype == "Walkable":
+			dirs.remove(i)
+	print("closest: ", targetPos + dirs.front())
+	return targetPos + dirs.front()
+	
+	# AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH
+#	if sign(diff.x) > 0:
+#		if sign(diff.y) > 0:
+#			if abs(diff.x) > abs(diff.y):
+#				#East
+#				final = diff + Vector2.RIGHT
+#			else:
+#				#South
+#				final = diff + Vector2.DOWN
+#		else:
+#			if abs(diff.x) > abs(diff.y):
+#				#East
+#				final = diff + Vector2.RIGHT
+#			else:
+#				#North
+#				final = diff + Vector2.UP
+#	elif sign(diff.x) < 0:
+#		if sign(diff.y) > 0:
+#			if abs(diff.x) > abs(diff.y):
+#				#West
+#				final = diff + Vector2.LEFT
+#			else:
+#				#South
+#				final = diff + Vector2.DOWN
+#		else:
+#			if abs(diff.x) > abs(diff.y):
+#				#West
+#				final = diff + Vector2.LEFT
+#			else:
+#				#North
+#				final = diff + Vector2.UP
+#	else:
+#		if sign(diff.y) > 0:
+#			#south
+#			final = diff + Vector2.DOWN
+#		else:
+#			#north
+#			final = diff + Vector2.UP
 
 func getTilesOfType(name):
 	# first, get the id of name
