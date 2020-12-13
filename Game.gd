@@ -15,6 +15,7 @@ var currentCastle
 var castles = []
 
 func _ready():
+	randomize()
 	castles = grid.getTilesOfType("Castle")
 	prepTurn()
 	$UI/Bench/Panel/UnitSlot1/ShopUnit.connect("dropped", self, "dropShopUnit")

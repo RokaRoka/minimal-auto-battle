@@ -24,7 +24,7 @@ export(int) var skl = 5
 export(int) var lck = 5
 export(int) var spd = 5
 
-export(int) var moveRange = 5
+export(int) var mov = 5
 
 signal attack_done
 signal damage_taken_done
@@ -116,7 +116,7 @@ func takeTurn():
 		return
 	
 	var longpath = grid.getPath(cellPos, destination)
-	for i in range(0, moveRange + 1):
+	for i in range(0, mov + 1):
 		var dest_node = longpath.pop_front()
 		if dest_node != null:
 			path.append(dest_node)
@@ -172,4 +172,12 @@ func takeDamage(dmg):
 
 func updateHealthUI():
 	var healthbar = $HealthUI/FG
-	healthbar.margin_right = -float(hp - currHp)/float(hp) * healthbar.rect_size.x
+	healthbar.margin_right = -max(0, float(hp - currHp))/float(hp) * healthbar.rect_size.x
+
+
+func _on_mouse_entered():
+	get_node("/root/Game/UI/StatPreview").setStats(self)
+
+
+func _on_mouse_exited():
+	get_node("/root/Game/UI/StatPreview").hide()

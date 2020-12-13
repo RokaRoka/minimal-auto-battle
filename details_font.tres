@@ -1,0 +1,6 @@
+[gd_resource type="DynamicFont" load_steps=2 format=2]
+
+[ext_resource path="res://Fonts/hf-gold-complete/ruler-gold-v1/RulerGold.ttf" type="DynamicFontData" id=1]
+
+[resource]
+font_data = ExtResource( 1 )
