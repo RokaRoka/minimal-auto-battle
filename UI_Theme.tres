@@ -2,10 +2,10 @@
 
 [ext_resource path="res://details_font.tres" type="DynamicFont" id=1]
 
-[sub_resource type="StyleBoxLine" id=2]
+[sub_resource type="StyleBoxLine" id=1]
 color = Color( 0.901961, 0.901961, 0.901961, 1 )
 
 [resource]
 default_font = ExtResource( 1 )
 HSeparator/constants/separation = 4
-HSeparator/styles/separator = SubResource( 2 )
+HSeparator/styles/separator = SubResource( 1 )

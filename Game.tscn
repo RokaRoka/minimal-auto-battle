@@ -598,19 +598,13 @@ default_color = Color( 0.686275, 0.686275, 0.686275, 1 )
 begin_cap_mode = 1
 end_cap_mode = 2
 
-[node name="DestMark" type="Sprite" parent="Grid"]
-modulate = Color( 1, 1, 1, 0.705882 )
-position = Vector2( 8, 8.00002 )
-scale = Vector2( 0.25, 0.25 )
-texture = ExtResource( 6 )
+[node name="Units" type="YSort" parent="."]
 
-[node name="Units" type="YSort" parent="Grid"]
+[node name="Unit" parent="Units" instance=ExtResource( 3 )]
+position = Vector2( 184, 200 )
 
-[node name="Unit" parent="Grid/Units" instance=ExtResource( 3 )]
-position = Vector2( 184, 168 )
-
-[node name="Unit2" parent="Grid/Units" instance=ExtResource( 3 )]
+[node name="Unit2" parent="Units" instance=ExtResource( 3 )]
 self_modulate = Color( 1, 0.211765, 0.211765, 1 )
-position = Vector2( 296, 168 )
+position = Vector2( 296, 136 )
 affiliation = "Enemy"
 [connection signal="pressed" from="UI/PrepMenu/VBoxContainer/AtttackBtn" to="." method="_on_AtttackBtn_pressed"]

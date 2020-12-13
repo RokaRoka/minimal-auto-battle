@@ -2,7 +2,6 @@ extends Sprite
 class_name Unit
 
 onready var path2D = get_tree().current_scene.get_node("Grid/Path")
-onready var destMark = get_tree().current_scene.get_node("Grid/DestMark")
 var grid: Grid
 
 var cellPos = Vector2(0, 0)
@@ -24,14 +23,13 @@ export(int) var skl = 5
 export(int) var lck = 5
 export(int) var spd = 5
 
-export(int) var mov = 5
+export(int) var mov = 6
 
 signal attack_done
 signal damage_taken_done
 signal turn_done
 
 func _ready():
-	destMark.hide()
 	# set group for affiliation
 	add_to_group(affiliation)
 
@@ -54,8 +52,6 @@ func _process(delta):
 func setDestination(cellPosv: Vector2):
 	destination = grid.getGridPos(cellPosv)
 	path = grid.getPath(cellPos, destination)
-	destMark.position = destination * grid.tileMap.cell_size
-	destMark.show()
 
 func moveComplete():
 	moving = false
@@ -96,7 +92,7 @@ func updateDestination():
 	if targets.empty():
 		destination = null
 		return
-	destination = grid.getClosestToCellPos(cellPos, targets.front().cellPos)
+	destination = grid.getClosestToCellPos(cellPos, targets.front().cellPos, mov)
 
 func checkAdjacentToTarget():
 	if cellPos.x == targets.front().cellPos.x and \
@@ -127,7 +123,7 @@ func takeTurn():
 
 func attack(other: Unit):
 	# TODO change this for atk vs mag depending on weapon
-	var damage = atk + 8 # weapon damage magic num
+	var damage = atk + 5 # weapon damage magic num
 	var hit = (skl * 2) + (lck/2) + 70 # weapon hit magic num
 	var crit = (skl/2) + 0 # weapon crit magic num
 	print("DAMAGE: ", damage, ", HIT%: ", hit, ", CRIT%: ", crit)

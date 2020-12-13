@@ -6,13 +6,10 @@ onready var tileMap = $TileMap
 #Grid information is determined by tilemap. Navigation is based on tilemap.
 ## TILEMAP RULES ALL ##
 
-#grids (or uh, just one grid)
-
-# Grid is offset and a different size than the rest of the tilemap
-# This is important for the unit grid and astar
-# i.e. [3, 5] on the tilemap is [0, 0] for the grid
+# The Unit Grid is offset and at a different size than the rest of the tilemap
+# This is important for astar
+# i.e. [3, 5] on the tilemap is [0, 0] for the unit grid
 var gridRect: Rect2
-
 var unitGrid = []
 
 func _ready():
@@ -56,21 +53,18 @@ func _ready():
 	# astar test
 #	var pathPlayer = astar.get_id_path(0, 63)
 #	print("path from top left to botton right! Points: ", pathPlayer)
-	# assign Units to grid
-	for unit in $Units.get_children():
-		addUnit(unit)
 
 func getGridOriginv():
 	return gridRect.position * tileMap.cell_size
 
 func addUnit(var unit):
 	unit.grid = self
-	unit.cellPos = tileMap.world_to_map(unit.position)# - gridRect.position
+	unit.cellPos = tileMap.world_to_map(unit.position) - gridRect.position
 	print("Adding Unit. Cell Pos : ", unit.cellPos)
-	unitGrid[unit.cellPos.x + (10 * unit.cellPos.y)]
+	unitGrid[unit.cellPos.x + (gridRect.size.x * unit.cellPos.y)]
 
 func getUnit(var cellPos):
-	return unitGrid[cellPos.x + (10 * cellPos.y)]
+	return unitGrid[cellPos.x + (gridRect.size.x * cellPos.y)]
 
 #takes in world based positions [32, 64] or [78.5, 54.2]
 func getPathv(cellPosv1, cellPosv2):
@@ -81,51 +75,46 @@ func getPathv(cellPosv1, cellPosv2):
 	if !validPathv(cellPosv1, cellPosv2):
 		return []
 	
-	cellPos1 -= gridRect.position
-	cellPos2 -= gridRect.position
+	#cellPos1 -= gridRect.position
+	#cellPos2 -= gridRect.position
 	var astarId1 = cellPos1.x + (cellPos1.y * gridRect.size.x)
 	var astarId2 = cellPos2.x + (cellPos2.y * gridRect.size.x)
-	return Array(astar.get_point_path(astarId1, astarId2))
+	var path = Array(astar.get_point_path(astarId1, astarId2))
+	path = path.slice(1, path.size())
+	return path
 
 #takes in cell based positions [0, 1] or [4, 3] etc
+#returns the next node to move to from cellpos1, up until cellpos2
 func getPath(cellPos1, cellPos2):
 	if !validPath(cellPos1, cellPos2):
 		return []
 	
-	cellPos1 -= gridRect.position
-	cellPos2 -= gridRect.position
+	#cellPos1 -= gridRect.position
+	#cellPos2 -= gridRect.position
 	var astarId1 = cellPos1.x + (cellPos1.y * gridRect.size.x)
 	var astarId2 = cellPos2.x + (cellPos2.y * gridRect.size.x)
-	return Array(astar.get_point_path(astarId1, astarId2))
-
-func getGridPos(posv):
-	return tileMap.world_to_map(posv)
-
-func getSnappedPos(pos):
-	return tileMap.world_to_map(pos) * tileMap.cell_size
-
-func getCellId(pos):
-	var cellPos = tileMap.world_to_map(pos)# - gridRect.position
-	return tileMap.get_cellv(cellPos)
-
-func getTileName(id):
-	return tileMap.tile_set.tile_get_name(id)
+	var path = Array(astar.get_point_path(astarId1, astarId2))
+	path = path.slice(1, path.size())
+	return path
 
 func validPathv(cellPosv1, cellPosv2):
-	var cellPos1 = tileMap.world_to_map(cellPosv1)
-	var cellPos2 = tileMap.world_to_map(cellPosv2)
+	var cellPos1 = tileMap.world_to_map(cellPosv1) - gridRect.position
+	var cellPos2 = tileMap.world_to_map(cellPosv2) - gridRect.position
 	return validPath(cellPos1, cellPos2)
 
 func validPath(cellPos1, cellPos2):
-	#return blank array for out of bound paths
-	if !gridRect.has_point(cellPos1) or !gridRect.has_point(cellPos2):
+	# TODO: fine consistent naming for astar/unit grid and tilemap
+	# This is some bullshit basically
+	var cell1 = cellPos1 + gridRect.position
+	var cell2 = cellPos2 + gridRect.position
+	if !gridRect.has_point(cell1) or !gridRect.has_point(cell2):
 		return false
 	
-	var cell = tileMap.get_cell(cellPos1.x, cellPos1.y)
+	var cell = tileMap.get_cell(cell1.x, cell1.y)
 	if cell == tileMap.INVALID_CELL:
 		return false
 	
-	cell = tileMap.get_cell(cellPos2.x, cellPos2.y)
+	cell = tileMap.get_cell(cell2.x, cell2.y)
 	if cell == tileMap.INVALID_CELL:
 		return false
 	
@@ -135,17 +124,41 @@ func validPath(cellPos1, cellPos2):
 		return false
 	return true
 
+func getGridPos(posv):
+	return tileMap.world_to_map(posv) - gridRect.position
+
+func getSnappedPosv(pos):
+	return tileMap.world_to_map(pos) * tileMap.cell_size
+
+func getCellId(pos):
+	var cellPos = tileMap.world_to_map(pos)# - gridRect.position
+	return tileMap.get_cellv(cellPos)
+
+func getTileName(id):
+	return tileMap.tile_set.tile_get_name(id)
+
 # for when we are attacking enemies
-func getClosestToCellPos(curPos, targetPos):
-	var diff = targetPos.distance_squared_to(curPos)
+func getClosestToCellPos(curPos, targetPos, limitMovement = -1):
+	#var diff = targetPos.distance_squared_to(curPos)
 	var dirs = [Vector2.UP, Vector2.DOWN, Vector2.LEFT, Vector2.RIGHT]
 	
 	# remove literally unreachable locations
 	for i in range(0, 4):
-		var cell = tileMap.get_cell(targetPos.x + dirs[i].x, targetPos.y + dirs[i].y)
+		var pos = targetPos + dirs[i]
+		var cell = tileMap.get_cell(pos.x + gridRect.position.x, pos.y + gridRect.position.y)
 		var tiletype = getTileName(cell)
-		if !tiletype == "Walkable":
+		if !tiletype == "Walkable" or getUnit(pos) != null:
 			dirs.remove(i)
+			continue
+	
+	if limitMovement > -1:
+		for i in range(0, dirs.size()):
+			var pos = targetPos + dirs[i]
+			var dist = curPos - pos
+			if limitMovement >= (abs(dist.x) + abs(dist.y)):
+				print("closest: ", targetPos + dirs[i])
+				return targetPos + dirs[i]
+	
 	print("closest: ", targetPos + dirs.front())
 	return targetPos + dirs.front()
 	

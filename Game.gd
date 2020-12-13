@@ -4,7 +4,6 @@ extends Node2D
 var unitTscn = preload("res://Unit.tscn")
 
 onready var grid = $Grid
-onready var testUnit = $Grid/Units/Unit
 onready var turnUIAnim = $UI/TakeTurn/AnimationPlayer
 onready var prepUI = $UI/PrepMenu
 
@@ -16,8 +15,11 @@ var castles = []
 
 func _ready():
 	randomize()
-	castles = grid.getTilesOfType("Castle")
+	# assign Units to grid
+	for unit in $Units.get_children():
+		grid.addUnit(unit)
 	prepTurn()
+	#for testing shop
 	$UI/Bench/Panel/UnitSlot1/ShopUnit.connect("dropped", self, "dropShopUnit")
 
 func prepTurn():
@@ -47,11 +49,11 @@ func takePlayerTurn():
 	turnQueue.front().takeTurn()
 
 func _unhandled_input(event):
-	if event is InputEventMouseButton:
-		if event.pressed and event.button_index == BUTTON_LEFT:
-			if grid.validPathv(testUnit.position, event.position):
-				for unit in get_tree().get_nodes_in_group("Player"):
-					unit.setDestination(event.position)
+#	if event is InputEventMouseButton:
+#		if event.pressed and event.button_index == BUTTON_LEFT:
+#			if grid.validPathv(testUnit.position, event.position):
+#				for unit in get_tree().get_nodes_in_group("Player"):
+#					unit.setDestination(event.position)
 	if event is InputEventKey:
 		if event.pressed and event.scancode == KEY_SPACE:
 			if turn == "prep":
@@ -62,17 +64,20 @@ func dropShopUnit(draggable):
 	var mousePos = get_global_mouse_position()
 	#check if its a valid space
 	var cellId = grid.getCellId(mousePos)
+#	if grid.getTileName(cellId) != "walkable":
+#		return
+	
 	draggable.hide()
 	#create unit and add to grid
 	var newUnit = unitTscn.instance()
-	newUnit.position = grid.getSnappedPos(mousePos) + grid.tileMap.cell_size/2
+	newUnit.position = grid.getSnappedPosv(mousePos) + grid.tileMap.cell_size/2
 	grid.addUnit(newUnit)
-	$Grid/Units.add_child(newUnit)
+	$Units.add_child(newUnit)
 
 func _on_AtttackBtn_pressed():
 	print("bla;fbaiwueskf!")
-	if castles.empty():
-		return
-	if grid.validPath(testUnit.position, castles.front()):
-		print("Castle is next dest!")
-		testUnit.setDestination(castles.front())
+#	if castles.empty():
+#		return
+#	if grid.validPath(testUnit.position, castles.front()):
+#		print("Castle is next dest!")
+#		testUnit.setDestination(castles.front())
