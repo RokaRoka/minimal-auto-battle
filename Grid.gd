@@ -61,10 +61,26 @@ func addUnit(var unit):
 	unit.grid = self
 	unit.cellPos = tileMap.world_to_map(unit.position) - gridRect.position
 	print("Adding Unit. Cell Pos : ", unit.cellPos)
-	unitGrid[unit.cellPos.x + (gridRect.size.x * unit.cellPos.y)]
+	var cellId = unit.cellPos.x + (gridRect.size.x * unit.cellPos.y)
+	if unit.affiliation == "Enemy":
+		astar.set_point_disabled(cellId, true)
+	unitGrid[cellId] = unit
 
 func getUnit(var cellPos):
 	return unitGrid[cellPos.x + (gridRect.size.x * cellPos.y)]
+
+func moveUnit(var unit, var newCellPos):
+	#reset old
+	var cellId = unit.cellPos.x + (gridRect.size.x * unit.cellPos.y)
+	unitGrid[cellId] = null
+	if unit.affiliation == "Enemy":
+		astar.set_point_disabled(cellId, false)
+	#set new
+	unit.cellPos = newCellPos
+	cellId = unit.cellPos.x + (gridRect.size.x * unit.cellPos.y)
+	if unit.affiliation == "Enemy":
+		astar.set_point_disabled(cellId, true)
+	unitGrid[cellId] = unit
 
 #takes in world based positions [32, 64] or [78.5, 54.2]
 func getPathv(cellPosv1, cellPosv2):
@@ -140,27 +156,27 @@ func getTileName(id):
 # for when we are attacking enemies
 func getClosestToCellPos(curPos, targetPos, limitMovement = -1):
 	#var diff = targetPos.distance_squared_to(curPos)
-	var dirs = [Vector2.UP, Vector2.DOWN, Vector2.LEFT, Vector2.RIGHT]
+	var dirs = [Vector2.DOWN, Vector2.UP, Vector2.LEFT, Vector2.RIGHT]
+	var finalDirs = []
 	
 	# remove literally unreachable locations
 	for i in range(0, 4):
 		var pos = targetPos + dirs[i]
 		var cell = tileMap.get_cell(pos.x + gridRect.position.x, pos.y + gridRect.position.y)
 		var tiletype = getTileName(cell)
-		if !tiletype == "Walkable" or getUnit(pos) != null:
-			dirs.remove(i)
-			continue
+		if tiletype == "Walkable" and getUnit(pos) == null:
+			finalDirs.append(dirs[i])
 	
 	if limitMovement > -1:
 		for i in range(0, dirs.size()):
-			var pos = targetPos + dirs[i]
+			var pos = targetPos + finalDirs[i]
 			var dist = curPos - pos
 			if limitMovement >= (abs(dist.x) + abs(dist.y)):
-				print("closest: ", targetPos + dirs[i])
-				return targetPos + dirs[i]
+				print("closest: ", targetPos + finalDirs[i])
+				return targetPos + finalDirs[i]
 	
-	print("closest: ", targetPos + dirs.front())
-	return targetPos + dirs.front()
+	print("closest: ", targetPos + finalDirs.front())
+	return targetPos + finalDirs.front()
 	
 	# AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH
 #	if sign(diff.x) > 0:

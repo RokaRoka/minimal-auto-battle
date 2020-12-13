@@ -57,7 +57,7 @@ func moveComplete():
 	moving = false
 	destination = null
 	path2D.points = []
-	cellPos = grid.getGridPos(position)
+	grid.moveUnit(self, grid.getGridPos(position))
 	
 	#initiate combat??
 	if checkAdjacentToTarget():
@@ -121,29 +121,34 @@ func takeTurn():
 	path2D.points = path
 	moving = true
 
+func getHit():
+	return (skl * 2) + (lck/2) + 75 # weapon hit magic num
+
+func getAvo():
+	return lck - spd
+
 func attack(other: Unit):
 	# TODO change this for atk vs mag depending on weapon
-	var damage = atk + 5 # weapon damage magic num
-	var hit = (skl * 2) + (lck/2) + 70 # weapon hit magic num
-	var crit = (skl/2) + 0 # weapon crit magic num
+	var damage = atk + 7 # weapon damage magic num
+	var hit = getHit()
+	var crit = (skl/2) + 2 # weapon crit magic num
 	print("DAMAGE: ", damage, ", HIT%: ", hit, ", CRIT%: ", crit)
 	
 	#roll for hit and crit
 	var didHit = false
-	var didCrit = false
 	var dealtDamage = -1
 	
 	print(name, " attacks and...")
-	if ((randi() % 101) + 1 < hit): #minus enemy avoid
+	if (randi() % 101) + 1 < hit - other.getAvo(): #minus enemy avoid
 		print("hits!")
 		didHit = true
-		dealtDamage = damage #minus enemy def/res
-		if ((randi() % 101) + 1 < crit): #minus enemy luck
-			print("and crits!")
-			didCrit = true
+		dealtDamage = max(0, damage - other.def)
+		if ((randi() % 101) + 1 < crit): 
+			print("and crits!!!")
 			dealtDamage *= 2
+			#crit animation
+		#attack animation
 	
-	#animation
 	#var tween = Tween.new()
 	#tween
 	var timer = get_tree().create_timer(.5)
@@ -155,9 +160,10 @@ func takeDamage(dmg):
 	if dmg == -1:
 		print("Miss!")
 		#miss animation
+	elif dmg == 0:
+		print("No Dmg!")
 	else:
-		print(name, " takes ", dmg, "damage!")
-		
+		print(name, " takes ", dmg, " damage!")
 		currHp -= dmg
 		print(name, " health: ", currHp, "/", hp)
 		updateHealthUI()
@@ -168,7 +174,7 @@ func takeDamage(dmg):
 
 func updateHealthUI():
 	var healthbar = $HealthUI/FG
-	healthbar.margin_right = -max(0, float(hp - currHp))/float(hp) * healthbar.rect_size.x
+	healthbar.margin_right = -(float(hp - max(0, currHp))/float(hp)) * healthbar.rect_size.x
 
 
 func _on_mouse_entered():
