@@ -35,9 +35,15 @@ func takePlayerTurn():
 	$UI/Bench.hide()
 	$UI/Shop.hide()
 	turnQueue = get_tree().get_nodes_in_group("Player")
+	var enemies = get_tree().get_nodes_in_group("Enemy")
+	for enemy in enemies:
+		turnQueue.append(enemy)
+	enemies = null
+	randomize()
+	turnQueue.shuffle()
+	
 	for i in range(0, turnQueue.size()):
 		var unit = turnQueue[i]
-		
 		# units that go last bring it back to "prepTurn"
 		if unit == turnQueue.back():
 			unit.connect("turn_done", self, "prepTurn", [], CONNECT_ONESHOT)
