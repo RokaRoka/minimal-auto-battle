@@ -1,7 +1,7 @@
 extends Node2D
 
 # branched scenes
-var unitTscn = preload("res://Unit.tscn")
+var unitTscn = preload("res://Unit/Unit.tscn")
 
 onready var grid = $Grid
 onready var turnUIAnim = $UI/TakeTurn/AnimationPlayer
@@ -9,9 +9,6 @@ onready var prepUI = $UI/PrepMenu
 
 var turn = "prep"
 var turnQueue = []
-
-var currentCastle
-var castles = []
 
 func _ready():
 	randomize()

@@ -1,17 +1,19 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://Grid.gd" type="Script" id=1]
 [ext_resource path="res://Tiles/TileSet.tres" type="TileSet" id=2]
-[ext_resource path="res://Unit.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Unit/Unit.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Phases/Combat/Combat.gd" type="Script" id=4]
 [ext_resource path="res://Game.gd" type="Script" id=5]
 [ext_resource path="res://icon.png" type="Texture" id=6]
-[ext_resource path="res://Draggable.gd" type="Script" id=7]
-[ext_resource path="res://details_font.tres" type="DynamicFont" id=8]
+[ext_resource path="res://Phases/Prep/Draggable.gd" type="Script" id=7]
+[ext_resource path="res://Fonts/details_font.tres" type="DynamicFont" id=8]
 [ext_resource path="res://UI_Theme.tres" type="Theme" id=9]
-[ext_resource path="res://StatPreview.gd" type="Script" id=10]
+[ext_resource path="res://Phases/Prep/StatPreview.gd" type="Script" id=10]
 
 [sub_resource type="Animation" id=1]
 resource_name = "EnemyTurn"
+length = 0.4
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:modulate")
 tracks/0/interp = 1
@@ -19,7 +21,7 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.5, 1 ),
+"times": PoolRealArray( 0, 0.2, 0.4 ),
 "transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0.0588235 ), Color( 1, 1, 1, 1 ) ]
@@ -43,7 +45,7 @@ tracks/2/loop_wrap = true
 tracks/2/imported = false
 tracks/2/enabled = true
 tracks/2/keys = {
-"times": PoolRealArray( 0.5 ),
+"times": PoolRealArray( 0.2 ),
 "transitions": PoolRealArray( 1 ),
 "update": 1,
 "values": [ "Enemy Turn" ]
@@ -51,6 +53,7 @@ tracks/2/keys = {
 
 [sub_resource type="Animation" id=2]
 resource_name = "PlayerTurn"
+length = 0.4
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:modulate")
 tracks/0/interp = 1
@@ -58,7 +61,7 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.5, 1 ),
+"times": PoolRealArray( 0, 0.2, 0.4 ),
 "transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0.0588235 ), Color( 1, 1, 1, 1 ) ]
@@ -82,7 +85,7 @@ tracks/2/loop_wrap = true
 tracks/2/imported = false
 tracks/2/enabled = true
 tracks/2/keys = {
-"times": PoolRealArray( 0.5 ),
+"times": PoolRealArray( 0.2 ),
 "transitions": PoolRealArray( 1 ),
 "update": 1,
 "values": [ "Player Turn" ]
@@ -90,6 +93,7 @@ tracks/2/keys = {
 
 [sub_resource type="Animation" id=3]
 resource_name = "Prep"
+length = 0.4
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:modulate")
 tracks/0/interp = 1
@@ -97,7 +101,7 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.5, 1 ),
+"times": PoolRealArray( 0, 0.2, 0.4 ),
 "transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0.0588235 ), Color( 1, 1, 1, 1 ) ]
@@ -109,7 +113,7 @@ tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0.5 ),
+"times": PoolRealArray( 0.2 ),
 "transitions": PoolRealArray( 1 ),
 "update": 1,
 "values": [ true ]
@@ -121,7 +125,7 @@ tracks/2/loop_wrap = true
 tracks/2/imported = false
 tracks/2/enabled = true
 tracks/2/keys = {
-"times": PoolRealArray( 0.5 ),
+"times": PoolRealArray( 0.2 ),
 "transitions": PoolRealArray( 1 ),
 "update": 1,
 "values": [ "Prep" ]
@@ -143,6 +147,7 @@ script = ExtResource( 5 )
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="TakeTurn" type="Label" parent="UI"]
+visible = false
 margin_left = 16.0
 margin_top = 16.0
 margin_right = 100.0
@@ -164,6 +169,7 @@ anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -97.0
 margin_bottom = 76.0
+theme = ExtResource( 9 )
 custom_styles/panel = SubResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -172,14 +178,14 @@ __meta__ = {
 [node name="VBoxContainer" type="VBoxContainer" parent="UI/PrepMenu"]
 margin_left = 1.0
 margin_top = 1.0
-margin_right = 96.0
+margin_right = 98.0
 margin_bottom = 75.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Label" type="Label" parent="UI/PrepMenu/VBoxContainer"]
-margin_right = 95.0
+margin_right = 97.0
 margin_bottom = 14.0
 text = "Decision"
 align = 1
@@ -189,21 +195,21 @@ __meta__ = {
 
 [node name="AtttackBtn" type="Button" parent="UI/PrepMenu/VBoxContainer"]
 margin_top = 18.0
-margin_right = 95.0
+margin_right = 97.0
 margin_bottom = 34.0
 custom_styles/normal = SubResource( 4 )
 text = "Attack Castle"
 
 [node name="ShopBtn" type="Button" parent="UI/PrepMenu/VBoxContainer"]
 margin_top = 38.0
-margin_right = 95.0
+margin_right = 97.0
 margin_bottom = 54.0
 custom_styles/normal = SubResource( 4 )
 text = "Go Shopping"
 
 [node name="StayBtn" type="Button" parent="UI/PrepMenu/VBoxContainer"]
 margin_top = 58.0
-margin_right = 95.0
+margin_right = 97.0
 margin_bottom = 74.0
 custom_styles/normal = SubResource( 4 )
 text = "Stay"
@@ -212,6 +218,7 @@ text = "Stay"
 margin_top = 336.0
 margin_right = 480.0
 margin_bottom = 400.0
+theme = ExtResource( 9 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -361,7 +368,8 @@ __meta__ = {
 [node name="Shop" type="Control" parent="UI"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_top = 416.0
+margin_top = 408.0
+theme = ExtResource( 9 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -369,7 +377,6 @@ __meta__ = {
 [node name="Panel" type="Panel" parent="UI/Shop"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_top = -8.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -445,9 +452,10 @@ __meta__ = {
 }
 
 [node name="StatPreview" type="Panel" parent="UI"]
-margin_left = 400.0
+visible = false
+margin_left = 384.0
 margin_top = 16.0
-margin_right = 464.0
+margin_right = 472.0
 margin_bottom = 200.0
 theme = ExtResource( 9 )
 script = ExtResource( 10 )
@@ -456,14 +464,20 @@ __meta__ = {
 }
 
 [node name="Name" type="Label" parent="UI/StatPreview"]
+anchor_right = 1.0
 margin_left = 8.0
 margin_top = 8.0
-margin_right = 50.0
+margin_right = -24.0
 margin_bottom = 23.0
 text = "Name"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="UnitPortrait" type="Sprite" parent="UI/StatPreview"]
+position = Vector2( 64, 8 )
+centered = false
+region_enabled = true
 
 [node name="HSeparator" type="HSeparator" parent="UI/StatPreview"]
 anchor_right = 1.0
@@ -572,6 +586,160 @@ margin_right = -8.0
 margin_bottom = 176.0
 custom_fonts/font = ExtResource( 8 )
 text = "Mov: 1"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Combat" type="Panel" parent="UI"]
+visible = false
+margin_top = 384.0
+margin_right = 480.0
+margin_bottom = 480.0
+theme = ExtResource( 9 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Player" type="Panel" parent="UI/Combat"]
+self_modulate = Color( 0.380392, 0.92549, 1, 1 )
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 232.0
+margin_bottom = 88.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HP" type="Label" parent="UI/Combat/Player"]
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 40.0
+margin_bottom = 24.0
+text = "HP"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HPBar" type="ProgressBar" parent="UI/Combat/Player"]
+margin_left = 48.0
+margin_top = 8.0
+margin_right = 216.0
+margin_bottom = 32.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Hit" type="Label" parent="UI/Combat/Player"]
+margin_left = 8.0
+margin_top = 40.0
+margin_right = 40.0
+margin_bottom = 56.0
+text = "Hit"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HitRate" type="Label" parent="UI/Combat/Player"]
+margin_left = 48.0
+margin_top = 40.0
+margin_right = 72.0
+margin_bottom = 56.0
+text = "0"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Crit" type="Label" parent="UI/Combat/Player"]
+margin_left = 8.0
+margin_top = 64.0
+margin_right = 40.0
+margin_bottom = 80.0
+text = "Crit"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CritRate" type="Label" parent="UI/Combat/Player"]
+margin_left = 48.0
+margin_top = 64.0
+margin_right = 72.0
+margin_bottom = 80.0
+text = "0"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Enemy" type="Panel" parent="UI/Combat"]
+self_modulate = Color( 1, 0.380392, 0.380392, 1 )
+margin_left = 248.0
+margin_top = 8.0
+margin_right = 472.0
+margin_bottom = 88.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HP" type="Label" parent="UI/Combat/Enemy"]
+margin_left = 184.0
+margin_top = 8.0
+margin_right = 216.0
+margin_bottom = 24.0
+text = "HP"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HPBar" type="ProgressBar" parent="UI/Combat/Enemy"]
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 176.0
+margin_bottom = 32.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Hit" type="Label" parent="UI/Combat/Enemy"]
+margin_left = 184.0
+margin_top = 40.0
+margin_right = 216.0
+margin_bottom = 56.0
+text = "Hit"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HitRate" type="Label" parent="UI/Combat/Enemy"]
+margin_left = 152.0
+margin_top = 40.0
+margin_right = 176.0
+margin_bottom = 56.0
+text = "0"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Crit" type="Label" parent="UI/Combat/Enemy"]
+margin_left = 184.0
+margin_top = 64.0
+margin_right = 216.0
+margin_bottom = 80.0
+text = "Crit"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CritRate" type="Label" parent="UI/Combat/Enemy"]
+margin_left = 152.0
+margin_top = 64.0
+margin_right = 176.0
+margin_bottom = 80.0
+text = "0"
+align = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
