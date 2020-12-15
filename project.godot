@@ -17,7 +17,7 @@ _global_script_classes=[ {
 "base": "Sprite",
 "class": "Unit",
 "language": "GDScript",
-"path": "res://Unit.gd"
+"path": "res://Unit/Unit.gd"
 } ]
 _global_script_class_icons={
 "Grid": "",
