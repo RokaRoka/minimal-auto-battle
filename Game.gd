@@ -4,7 +4,7 @@ extends Node2D
 var unitTscn = preload("res://Unit/Unit.tscn")
 
 onready var grid = $Grid
-onready var turnUIAnim = $UI/TakeTurn/AnimationPlayer
+onready var phaseAnimPlayer = $UI/Phase/AnimationPlayer
 onready var prepUI = $UI/PrepMenu
 
 var turn = "prep"
@@ -21,24 +21,22 @@ func _ready():
 
 func prepTurn():
 	turn = "prep"
-	turnUIAnim.stop()
-	turnUIAnim.play("Prep")
+	phaseAnimPlayer.stop()
+	phaseAnimPlayer.play("Prep")
 	#prepUI.show()
 	$UI/Bench.show()
 	$UI/Shop.show()
 
 func takePlayerTurn():
 	turn = "player"
-	turnUIAnim.stop()
-	turnUIAnim.play("PlayerTurn")
+	phaseAnimPlayer.stop()
+	phaseAnimPlayer.play("Combat")
 	#prepUI.hide()
 	$UI/Bench.hide()
 	$UI/Shop.hide()
 	turnQueue = get_tree().get_nodes_in_group("Player")
 	var enemies = get_tree().get_nodes_in_group("Enemy")
-	for enemy in enemies:
-		turnQueue.append(enemy)
-	enemies = null
+	turnQueue.append_array(enemies)
 	randomize()
 	turnQueue.shuffle()
 	

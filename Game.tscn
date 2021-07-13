@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://Grid.gd" type="Script" id=1]
 [ext_resource path="res://Tiles/TileSet.tres" type="TileSet" id=2]
@@ -10,24 +10,26 @@
 [ext_resource path="res://Fonts/details_font.tres" type="DynamicFont" id=8]
 [ext_resource path="res://UI_Theme.tres" type="Theme" id=9]
 [ext_resource path="res://Phases/Prep/StatPreview.gd" type="Script" id=10]
+[ext_resource path="res://Fonts/header1.tres" type="DynamicFont" id=11]
+[ext_resource path="res://Fonts/header2.tres" type="DynamicFont" id=12]
 
-[sub_resource type="Animation" id=1]
-resource_name = "EnemyTurn"
-length = 0.4
+[sub_resource type="Animation" id=7]
+resource_name = "Combat"
+length = 0.8
 tracks/0/type = "value"
-tracks/0/path = NodePath(".:modulate")
+tracks/0/path = NodePath("TakeTurn:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.2, 0.4 ),
+"times": PoolRealArray( 0, 0.3, 0.8 ),
 "transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
-"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0.0588235 ), Color( 1, 1, 1, 1 ) ]
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath(".:visible")
+tracks/1/path = NodePath("TakeTurn:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
@@ -39,99 +41,113 @@ tracks/1/keys = {
 "values": [ true ]
 }
 tracks/2/type = "value"
-tracks/2/path = NodePath(".:text")
+tracks/2/path = NodePath("TakeTurn:text")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
 tracks/2/enabled = true
 tracks/2/keys = {
-"times": PoolRealArray( 0.2 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ "Enemy Turn" ]
-}
-
-[sub_resource type="Animation" id=2]
-resource_name = "PlayerTurn"
-length = 0.4
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.2, 0.4 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0.0588235 ), Color( 1, 1, 1, 1 ) ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath(".:visible")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 1,
-"values": [ true ]
+"values": [ "Combat Phase" ]
 }
-tracks/2/type = "value"
-tracks/2/path = NodePath(".:text")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0.2 ),
+tracks/3/type = "value"
+tracks/3/path = NodePath("TakeTurn:rect_position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.8 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( -128, 16 ), Vector2( 16, 16 ) ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("TakeTurn/HSeparator:rect_size")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ "Player Turn" ]
+"update": 0,
+"values": [ Vector2( 192, 8 ) ]
 }
 
 [sub_resource type="Animation" id=3]
 resource_name = "Prep"
-length = 0.4
+length = 0.8
 tracks/0/type = "value"
-tracks/0/path = NodePath(".:modulate")
+tracks/0/path = NodePath("TakeTurn:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.2, 0.4 ),
+"times": PoolRealArray( 0, 0.3, 0.8 ),
 "transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
-"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0.0588235 ), Color( 1, 1, 1, 1 ) ]
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath(".:visible")
+tracks/1/path = NodePath("TakeTurn:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0.2 ),
+"times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 1,
 "values": [ true ]
 }
 tracks/2/type = "value"
-tracks/2/path = NodePath(".:text")
+tracks/2/path = NodePath("TakeTurn:text")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
 tracks/2/enabled = true
 tracks/2/keys = {
-"times": PoolRealArray( 0.2 ),
+"times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 1,
-"values": [ "Prep" ]
+"values": [ "Preperation Phase" ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("TakeTurn:rect_position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.8 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( -128, 16 ), Vector2( 16, 16 ) ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("TakeTurn/HSeparator:rect_size")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 240, 8 ) ]
 }
 
-[sub_resource type="StyleBoxFlat" id=4]
+[sub_resource type="StyleBoxLine" id=4]
+color = Color( 1, 1, 1, 1 )
+grow_begin = 0.0
+grow_end = 0.0
+thickness = 3
+
+[sub_resource type="StyleBoxFlat" id=5]
 bg_color = Color( 0, 0, 0, 1 )
 border_width_left = 1
 border_width_top = 1
@@ -139,29 +155,58 @@ border_width_right = 1
 border_width_bottom = 1
 border_blend = true
 
-[sub_resource type="StyleBoxFlat" id=5]
+[sub_resource type="StyleBoxFlat" id=6]
 
 [node name="Game" type="Node2D"]
 script = ExtResource( 5 )
 
 [node name="UI" type="CanvasLayer" parent="."]
 
-[node name="TakeTurn" type="Label" parent="UI"]
-visible = false
-margin_left = 16.0
-margin_top = 16.0
-margin_right = 100.0
-margin_bottom = 32.0
-theme = ExtResource( 9 )
-text = "Prep"
+[node name="Phase" type="Control" parent="UI"]
+margin_right = 480.0
+margin_bottom = 64.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="UI/TakeTurn"]
-anims/EnemyTurn = SubResource( 1 )
-anims/PlayerTurn = SubResource( 2 )
+[node name="AnimationPlayer" type="AnimationPlayer" parent="UI/Phase"]
+anims/Combat = SubResource( 7 )
 anims/Prep = SubResource( 3 )
+
+[node name="TakeTurn" type="Label" parent="UI/Phase"]
+modulate = Color( 1, 1, 1, 0 )
+margin_left = -128.0
+margin_top = 16.0
+margin_right = 104.0
+margin_bottom = 46.0
+theme = ExtResource( 9 )
+custom_fonts/font = ExtResource( 11 )
+text = "Combat Phase"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HSeparator" type="HSeparator" parent="UI/Phase/TakeTurn"]
+margin_left = -16.0
+margin_top = 32.0
+margin_right = 176.0
+margin_bottom = 40.0
+custom_styles/separator = SubResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SubTitle" type="Label" parent="UI/Phase/TakeTurn"]
+visible = false
+margin_left = -8.0
+margin_top = 40.0
+margin_right = 176.0
+margin_bottom = 55.0
+custom_fonts/font = ExtResource( 12 )
+text = "Unit's Turn"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="PrepMenu" type="PanelContainer" parent="UI"]
 visible = false
@@ -170,7 +215,7 @@ anchor_right = 1.0
 margin_left = -97.0
 margin_bottom = 76.0
 theme = ExtResource( 9 )
-custom_styles/panel = SubResource( 4 )
+custom_styles/panel = SubResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -197,21 +242,21 @@ __meta__ = {
 margin_top = 18.0
 margin_right = 97.0
 margin_bottom = 34.0
-custom_styles/normal = SubResource( 4 )
+custom_styles/normal = SubResource( 5 )
 text = "Attack Castle"
 
 [node name="ShopBtn" type="Button" parent="UI/PrepMenu/VBoxContainer"]
 margin_top = 38.0
 margin_right = 97.0
 margin_bottom = 54.0
-custom_styles/normal = SubResource( 4 )
+custom_styles/normal = SubResource( 5 )
 text = "Go Shopping"
 
 [node name="StayBtn" type="Button" parent="UI/PrepMenu/VBoxContainer"]
 margin_top = 58.0
 margin_right = 97.0
 margin_bottom = 74.0
-custom_styles/normal = SubResource( 4 )
+custom_styles/normal = SubResource( 5 )
 text = "Stay"
 
 [node name="Bench" type="Control" parent="UI"]
@@ -247,7 +292,7 @@ margin_right = 64.0
 margin_bottom = 56.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_styles/panel = SubResource( 5 )
+custom_styles/panel = SubResource( 6 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -276,7 +321,7 @@ margin_right = 112.0
 margin_bottom = 56.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_styles/panel = SubResource( 5 )
+custom_styles/panel = SubResource( 6 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -288,7 +333,7 @@ margin_right = 160.0
 margin_bottom = 56.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_styles/panel = SubResource( 5 )
+custom_styles/panel = SubResource( 6 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -300,7 +345,7 @@ margin_right = 208.0
 margin_bottom = 56.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_styles/panel = SubResource( 5 )
+custom_styles/panel = SubResource( 6 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -312,7 +357,7 @@ margin_right = 256.0
 margin_bottom = 56.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_styles/panel = SubResource( 5 )
+custom_styles/panel = SubResource( 6 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -324,7 +369,7 @@ margin_right = 304.0
 margin_bottom = 56.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_styles/panel = SubResource( 5 )
+custom_styles/panel = SubResource( 6 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -336,7 +381,7 @@ margin_right = 352.0
 margin_bottom = 56.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_styles/panel = SubResource( 5 )
+custom_styles/panel = SubResource( 6 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -348,7 +393,7 @@ margin_right = 400.0
 margin_bottom = 56.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_styles/panel = SubResource( 5 )
+custom_styles/panel = SubResource( 6 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -360,7 +405,7 @@ margin_right = 448.0
 margin_bottom = 56.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_styles/panel = SubResource( 5 )
+custom_styles/panel = SubResource( 6 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -592,7 +637,7 @@ __meta__ = {
 
 [node name="Combat" type="Panel" parent="UI"]
 visible = false
-margin_top = 384.0
+margin_top = 336.0
 margin_right = 480.0
 margin_bottom = 480.0
 theme = ExtResource( 9 )
@@ -606,7 +651,7 @@ self_modulate = Color( 0.380392, 0.92549, 1, 1 )
 margin_left = 8.0
 margin_top = 8.0
 margin_right = 232.0
-margin_bottom = 88.0
+margin_bottom = 136.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -631,40 +676,40 @@ __meta__ = {
 }
 
 [node name="Hit" type="Label" parent="UI/Combat/Player"]
-margin_left = 8.0
-margin_top = 40.0
-margin_right = 40.0
-margin_bottom = 56.0
-text = "Hit"
+margin_left = 16.0
+margin_top = 48.0
+margin_right = 51.0
+margin_bottom = 64.0
+text = "Hit %"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="HitRate" type="Label" parent="UI/Combat/Player"]
-margin_left = 48.0
-margin_top = 40.0
-margin_right = 72.0
-margin_bottom = 56.0
+margin_left = 64.0
+margin_top = 48.0
+margin_right = 88.0
+margin_bottom = 64.0
 text = "0"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Crit" type="Label" parent="UI/Combat/Player"]
-margin_left = 8.0
-margin_top = 64.0
-margin_right = 40.0
-margin_bottom = 80.0
-text = "Crit"
+margin_left = 16.0
+margin_top = 80.0
+margin_right = 57.0
+margin_bottom = 96.0
+text = "Crit %"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="CritRate" type="Label" parent="UI/Combat/Player"]
-margin_left = 48.0
-margin_top = 64.0
-margin_right = 72.0
-margin_bottom = 80.0
+margin_left = 64.0
+margin_top = 80.0
+margin_right = 88.0
+margin_bottom = 96.0
 text = "0"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -675,71 +720,66 @@ self_modulate = Color( 1, 0.380392, 0.380392, 1 )
 margin_left = 248.0
 margin_top = 8.0
 margin_right = 472.0
-margin_bottom = 88.0
+margin_bottom = 136.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="HP" type="Label" parent="UI/Combat/Enemy"]
-margin_left = 184.0
+margin_left = 8.0
 margin_top = 8.0
-margin_right = 216.0
+margin_right = 40.0
 margin_bottom = 24.0
 text = "HP"
-align = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="HPBar" type="ProgressBar" parent="UI/Combat/Enemy"]
-margin_left = 8.0
+margin_left = 48.0
 margin_top = 8.0
-margin_right = 176.0
+margin_right = 216.0
 margin_bottom = 32.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Hit" type="Label" parent="UI/Combat/Enemy"]
-margin_left = 184.0
-margin_top = 40.0
-margin_right = 216.0
-margin_bottom = 56.0
-text = "Hit"
-align = 2
+margin_left = 16.0
+margin_top = 48.0
+margin_right = 51.0
+margin_bottom = 64.0
+text = "Hit %"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="HitRate" type="Label" parent="UI/Combat/Enemy"]
-margin_left = 152.0
-margin_top = 40.0
-margin_right = 176.0
-margin_bottom = 56.0
+margin_left = 64.0
+margin_top = 48.0
+margin_right = 88.0
+margin_bottom = 64.0
 text = "0"
-align = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Crit" type="Label" parent="UI/Combat/Enemy"]
-margin_left = 184.0
-margin_top = 64.0
-margin_right = 216.0
-margin_bottom = 80.0
-text = "Crit"
-align = 2
+margin_left = 16.0
+margin_top = 80.0
+margin_right = 57.0
+margin_bottom = 96.0
+text = "Crit %"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="CritRate" type="Label" parent="UI/Combat/Enemy"]
-margin_left = 152.0
-margin_top = 64.0
-margin_right = 176.0
-margin_bottom = 80.0
+margin_left = 64.0
+margin_top = 80.0
+margin_right = 88.0
+margin_bottom = 96.0
 text = "0"
-align = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -775,4 +815,5 @@ position = Vector2( 184, 200 )
 self_modulate = Color( 1, 0.211765, 0.211765, 1 )
 position = Vector2( 296, 136 )
 affiliation = "Enemy"
+
 [connection signal="pressed" from="UI/PrepMenu/VBoxContainer/AtttackBtn" to="." method="_on_AtttackBtn_pressed"]

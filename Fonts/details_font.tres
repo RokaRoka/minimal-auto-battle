@@ -2,6 +2,5 @@
 
 [ext_resource path="res://Fonts/Data/hf-gold-complete/ruler-gold-v1/RulerGold.ttf" type="DynamicFontData" id=1]
 
-
 [resource]
 font_data = ExtResource( 1 )
