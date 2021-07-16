@@ -59,6 +59,9 @@ func _unhandled_input(event):
 		if event.pressed and event.scancode == KEY_SPACE:
 			if turn == "prep":
 				takePlayerTurn()
+		if !event.pressed and event.scancode == KEY_ENTER:
+			print("enterrrrrrr")
+			$"Units/Unit/2DShaker".hShake()
 
 func dropShopUnit(draggable):
 	#if we drop a unit on an empty space, spawn a unit

@@ -138,7 +138,6 @@ func getCrit():
 	return (skl/2) + 2 # weapon crit magic num
 
 func attack(other: Unit):
-	get_node("/root/Game/UI/Combat").show()
 	# TODO change this for atk vs mag depending on weapon
 	var damage = atk + 7 # weapon damage magic num
 	var hit = getHit()
@@ -180,9 +179,13 @@ func takeDamage(dmg):
 		#updateHealthUI()
 		if currHp <= 0:
 			print("oh no... go on... without meeeeee. (dead)")
-	var timer = get_tree().create_timer(1.0)
-	timer.connect("timeout", self, "emit_signal", ["damage_taken_done"], CONNECT_ONESHOT)
-	timer.connect("timeout", get_node("/root/Game/UI/Combat"), "hide", [], CONNECT_ONESHOT)
+	#damage animation!
+	
+	$"2DShaker".connect("shakeDone", self, "emit_signal", ["damage_taken_done"], CONNECT_ONESHOT)
+	$"2DShaker".hShake()
+	#var timer = get_tree().create_timer(1.0)
+	#timer.connect("timeout", self, "emit_signal", ["damage_taken_done"], CONNECT_ONESHOT)
+#	timer.connect("timeout", get_node("/root/Game/UI/Combat"), "hide", [], CONNECT_ONESHOT)
 
 func updateHealthUI():
 	var healthbar = $HealthUI/FG

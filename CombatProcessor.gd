@@ -26,7 +26,7 @@ onready var combatUI = get_node("/root/Game/UI/Combat")
 # Unit2 will *ALWAYS* be able to counterattack
 # Combat goes to end state when 1. either unit dies and/or 2. Both units have attacked
 func battle(unit1, unit2):
-	#combatUI.show()
+	combatUI.show()
 	if unit1.affiliation == "Player":
 		combatUI.setPlayerUnit(unit1)
 		unit1.connect("damage_taken", combatUI, "setPlayerUnit")
@@ -63,6 +63,6 @@ func battle(unit1, unit2):
 		unit2.disconnect("damage_taken", combatUI, "setEnemyUnit")
 	else:
 		unit2.disconnect("damage_taken", combatUI, "setPlayerUnit")
-	#combatUI.hide()
+	combatUI.hide()
 	#resume!
 	emit_signal("combat_done")
