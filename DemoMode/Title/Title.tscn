@@ -1,0 +1,65 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Fonts/header2.tres" type="DynamicFont" id=1]
+[ext_resource path="res://Fonts/title.tres" type="DynamicFont" id=2]
+
+[node name="Node" type="Node"]
+
+[node name="Control" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Title" type="Label" parent="Control"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -20.0
+margin_top = 48.0
+margin_right = 20.0
+margin_bottom = 62.0
+grow_horizontal = 2
+custom_fonts/font = ExtResource( 2 )
+text = "Minimal Auto Battler
+
+DEFINITELY-not-Fire-Emblem
+Edition"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PlayBtn" type="Button" parent="Control"]
+margin_left = 208.0
+margin_top = 256.0
+margin_right = 272.0
+margin_bottom = 288.0
+custom_fonts/font = ExtResource( 1 )
+text = "Play"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="FormBtn" type="Button" parent="Control"]
+margin_left = 208.0
+margin_top = 304.0
+margin_right = 272.0
+margin_bottom = 336.0
+custom_fonts/font = ExtResource( 1 )
+text = "QA Form"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="QuitBtn" type="Button" parent="Control"]
+margin_left = 208.0
+margin_top = 352.0
+margin_right = 272.0
+margin_bottom = 384.0
+custom_fonts/font = ExtResource( 1 )
+text = "Quit"
+__meta__ = {
+"_edit_use_anchors_": false
+}
