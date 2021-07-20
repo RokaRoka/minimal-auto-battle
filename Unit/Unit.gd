@@ -25,9 +25,12 @@ export(int) var spd = 5
 
 export(int) var mov = 6
 
+var queuedForDeath = false
+
 signal attack_done(unit)
 signal damage_taken(unit)
 signal damage_taken_done(unit)
+signal died(unit)
 signal turn_done(unit)
 
 func _ready():
@@ -150,42 +153,41 @@ func attack(other: Unit):
 	var didHit = false
 	var dealtDamage = -1
 	if (randi() % 101) + 1 < hit - other.getAvo(): #minus enemy avoid
-		print("They hits!")
+		print("> They hits!")
 		didHit = true
 		dealtDamage = max(0, damage - other.def)
 		if ((randi() % 101) + 1 < crit): 
-			print("and they crit!!!")
+			print("> ...and they crits!!!")
 			dealtDamage *= 2
 			#crit animation
 		#attack animation
 	
-	#var tween = Tween.new()
-	#tween
 	var timer = get_tree().create_timer(.75)
 	timer.connect("timeout", other, "takeDamage", [dealtDamage])
 	other.connect("damage_taken_done", self, "emit_signal", ["attack_done"], CONNECT_ONESHOT)
 	
 func takeDamage(dmg):
 	if dmg == -1:
-		print("Miss!")
+		print("> Miss!")
 		#miss animation
 	elif dmg == 0:
-		print("No Dmg!")
+		print("> No Dmg!")
 	else:
-		print(name, " takes ", dmg, " damage!")
 		currHp -= dmg
-		print(name, " health: ", currHp, "/", hp)
+		print("> ", name, " takes ", dmg, " damage! HP: ", currHp, "/", hp)
 		emit_signal("damage_taken", self)
-		#updateHealthUI()
-		if currHp <= 0:
-			print("oh no... go on... without meeeeee. (dead)")
-	#damage animation!
 	
-	$"2DShaker".connect("shakeDone", self, "emit_signal", ["damage_taken_done"], CONNECT_ONESHOT)
-	$"2DShaker".hShake()
-	#var timer = get_tree().create_timer(1.0)
-	#timer.connect("timeout", self, "emit_signal", ["damage_taken_done"], CONNECT_ONESHOT)
-#	timer.connect("timeout", get_node("/root/Game/UI/Combat"), "hide", [], CONNECT_ONESHOT)
+		#damage animation!
+		$"2DShaker".hShake()
+		
+		#DEATH!!!!!!
+		if currHp <= 0:
+			print("> 'oh no... go on... without meeeeee. (dead)'")
+			queuedForDeath = true
+	var timer = get_tree().create_timer(1.0)
+	timer.connect("timeout", self, "emit_signal", ["damage_taken_done"], CONNECT_ONESHOT)
+#	if queuedForDeath:
+#		timer.connect("timeout", self, "emit_signal", ["died"])
 
 func updateHealthUI():
 	var healthbar = $HealthUI/FG
@@ -200,3 +202,7 @@ func _on_mouse_entered():
 
 func _on_mouse_exited():
 	get_node("/root/Game/UI/StatPreview").hide()
+
+func _exit_tree():
+	if grid != null:
+		grid.removeUnit(self)
