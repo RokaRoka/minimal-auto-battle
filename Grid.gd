@@ -83,8 +83,6 @@ func removeUnit(var unit):
 	if unit.affiliation == "Enemy":
 		astar.set_point_disabled(cellId, false)
 	unitGrid[cellId] = null
-	
-	unit.grid = null
 	unit.cellPos = Vector2()
 
 #takes in world based positions [32, 64] or [78.5, 54.2]
@@ -159,12 +157,12 @@ func getTileName(id):
 	return tileMap.tile_set.tile_get_name(id)
 
 # for when we are attacking enemies
-func getClosestToCellPos(curPos, targetPos, limitMovement = -1):
+func getClosestToCellPos(curPos, targetPos, moveLimit = -1):
 	#var diff = targetPos.distance_squared_to(curPos)
 	var dirs = [Vector2.DOWN, Vector2.UP, Vector2.LEFT, Vector2.RIGHT]
 	var finalDirs = []
 	
-	# remove literally unreachable locations
+	# remove literally unreachable locations (down, up, left, and right) of target
 	for i in range(0, 4):
 		var pos = targetPos + dirs[i]
 		var cell = tileMap.get_cell(pos.x + gridRect.position.x, pos.y + gridRect.position.y)
@@ -172,11 +170,12 @@ func getClosestToCellPos(curPos, targetPos, limitMovement = -1):
 		if tiletype == "Walkable" and getUnit(pos) == null:
 			finalDirs.append(dirs[i])
 	
-	if limitMovement > -1:
-		for i in range(0, dirs.size()):
+	
+	if moveLimit > -1:
+		for i in range(0, finalDirs.size()):
 			var pos = targetPos + finalDirs[i]
 			var dist = curPos - pos
-			if limitMovement >= (abs(dist.x) + abs(dist.y)):
+			if moveLimit >= (abs(dist.x) + abs(dist.y)):
 				print("closest: ", targetPos + finalDirs[i])
 				return targetPos + finalDirs[i]
 	

@@ -23,13 +23,13 @@ export(int) var skl = 5
 export(int) var lck = 5
 export(int) var spd = 5
 
-export(int) var mov = 6
+export(int) var mov = 5
 
 var queuedForDeath = false
 
 signal attack_done(unit)
 signal damage_taken(unit)
-signal damage_taken_done(unit)
+signal damage_taken_done()
 signal died(unit)
 signal turn_done(unit)
 
@@ -108,13 +108,17 @@ func checkAdjacentToTarget():
 	return false
 
 func takeTurn():
+	if queuedForDeath:
+		emit_signal("turn_done")
+		return
+	
 	if targets.empty():
 		findTarget()
 	
 	if !checkAdjacentToTarget():
 		updateDestination()
 	else:
-		CombatProcessor.connect("combat_done", self, "emit_signal", ["turn_done"], CONNECT_ONESHOT)
+		CombatProcessor.connect("combat_done", self, "emit_signal", ["turn_done"], CONNECT_ONESHOT | CONNECT_DEFERRED)
 		CombatProcessor.battle(self, targets.front())
 		return
 	
@@ -193,8 +197,17 @@ func updateHealthUI():
 	var healthbar = $HealthUI/FG
 	#print("zero to one: ", float(max(0, currHp))/float(hp))
 	healthbar.rect_scale.x = float(max(0, currHp))/float(hp)
-	
 
+func death():
+	currHp = 0
+	hide()
+	grid.removeUnit(self)
+
+func reset():
+	queuedForDeath = false
+	grid.addUnit(self)
+	currHp = hp
+	show()
 
 func _on_mouse_entered():
 	get_node("/root/Game/UI/StatPreview").setStats(self)

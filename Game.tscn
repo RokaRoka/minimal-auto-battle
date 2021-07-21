@@ -13,6 +13,14 @@
 [ext_resource path="res://Fonts/header1.tres" type="DynamicFont" id=11]
 [ext_resource path="res://Fonts/header2.tres" type="DynamicFont" id=12]
 
+[sub_resource type="StyleBoxFlat" id=4]
+bg_color = Color( 0, 0, 0, 1 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_blend = true
+
 [sub_resource type="Animation" id=1]
 resource_name = "Combat"
 length = 0.8
@@ -147,66 +155,12 @@ grow_begin = 0.0
 grow_end = 0.0
 thickness = 3
 
-[sub_resource type="StyleBoxFlat" id=4]
-bg_color = Color( 0, 0, 0, 1 )
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_blend = true
-
 [sub_resource type="StyleBoxFlat" id=5]
 
 [node name="Game" type="Node2D"]
 script = ExtResource( 5 )
 
 [node name="UI" type="CanvasLayer" parent="."]
-
-[node name="Phase" type="Control" parent="UI"]
-margin_right = 480.0
-margin_bottom = 64.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="UI/Phase"]
-anims/Combat = SubResource( 1 )
-anims/Prep = SubResource( 2 )
-
-[node name="TakeTurn" type="Label" parent="UI/Phase"]
-modulate = Color( 1, 1, 1, 0 )
-margin_left = -128.0
-margin_top = 16.0
-margin_right = 104.0
-margin_bottom = 46.0
-theme = ExtResource( 9 )
-custom_fonts/font = ExtResource( 11 )
-text = "Combat Phase"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="HSeparator" type="HSeparator" parent="UI/Phase/TakeTurn"]
-margin_left = -16.0
-margin_top = 32.0
-margin_right = 176.0
-margin_bottom = 40.0
-custom_styles/separator = SubResource( 3 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="SubTitle" type="Label" parent="UI/Phase/TakeTurn"]
-visible = false
-margin_left = -8.0
-margin_top = 40.0
-margin_right = 176.0
-margin_bottom = 55.0
-custom_fonts/font = ExtResource( 12 )
-text = "Unit's Turn"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="PrepMenu" type="PanelContainer" parent="UI"]
 visible = false
@@ -259,10 +213,87 @@ margin_bottom = 74.0
 custom_styles/normal = SubResource( 4 )
 text = "Stay"
 
-[node name="Bench" type="Control" parent="UI"]
-margin_top = 336.0
+[node name="Phase" type="Control" parent="UI"]
 margin_right = 480.0
-margin_bottom = 400.0
+margin_bottom = 64.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="UI/Phase"]
+anims/Combat = SubResource( 1 )
+anims/Prep = SubResource( 2 )
+
+[node name="TakeTurn" type="Label" parent="UI/Phase"]
+margin_left = 16.0
+margin_top = 16.0
+margin_right = 248.0
+margin_bottom = 46.0
+theme = ExtResource( 9 )
+custom_fonts/font = ExtResource( 11 )
+text = "Combat Phase"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HSeparator" type="HSeparator" parent="UI/Phase/TakeTurn"]
+margin_left = -16.0
+margin_top = 32.0
+margin_right = 176.0
+margin_bottom = 40.0
+custom_styles/separator = SubResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SubTitle" type="Label" parent="UI/Phase/TakeTurn"]
+visible = false
+margin_left = -8.0
+margin_top = 40.0
+margin_right = 176.0
+margin_bottom = 55.0
+custom_fonts/font = ExtResource( 12 )
+text = "Unit's Turn"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PlayerStats" type="Control" parent="UI"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -152.0
+margin_top = 16.0
+margin_right = -8.0
+margin_bottom = 48.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PlayerHP" type="Label" parent="UI/PlayerStats"]
+margin_left = 8.0
+margin_top = 16.0
+margin_right = 122.0
+margin_bottom = 31.0
+custom_fonts/font = ExtResource( 12 )
+text = "Player Health - 10"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RoundNum" type="Label" parent="UI/PlayerStats"]
+margin_left = 8.0
+margin_right = 88.0
+margin_bottom = 15.0
+custom_fonts/font = ExtResource( 12 )
+text = "Round 1"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bench" type="Control" parent="UI"]
+margin_top = 360.0
+margin_right = 480.0
+margin_bottom = 480.0
 theme = ExtResource( 9 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -270,6 +301,7 @@ __meta__ = {
 
 [node name="Panel" type="Panel" parent="UI/Bench"]
 anchor_bottom = 1.0
+margin_top = 16.0
 margin_right = 480.0
 __meta__ = {
 "_edit_use_anchors_": false
@@ -413,7 +445,8 @@ __meta__ = {
 [node name="Shop" type="Control" parent="UI"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_top = 408.0
+margin_top = 480.0
+margin_bottom = 72.0
 theme = ExtResource( 9 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -432,6 +465,7 @@ margin_left = 8.0
 margin_top = 24.0
 margin_right = 64.0
 margin_bottom = -8.0
+disabled = true
 text = "Reroll"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -795,7 +829,7 @@ tile_set = ExtResource( 2 )
 cell_size = Vector2( 16, 16 )
 cell_custom_transform = Transform2D( 16, 0, 0, 16, 0, 0 )
 format = 1
-tile_data = PoolIntArray( 393224, 0, 0, 393225, 0, 0, 393226, 0, 0, 393227, 0, 0, 393228, 0, 0, 393229, 0, 0, 393230, 0, 0, 393231, 0, 0, 393232, 0, 0, 393233, 0, 0, 393234, 0, 0, 393235, 0, 0, 393236, 0, 0, 393237, 0, 0, 458760, 0, 0, 458761, 2, 0, 458762, 2, 0, 458763, 2, 0, 458764, 2, 0, 458765, 2, 0, 458766, 2, 0, 458767, 2, 0, 458768, 2, 0, 458769, 2, 0, 458770, 2, 0, 458771, 2, 0, 458772, 2, 0, 458773, 0, 0, 524296, 0, 0, 524297, 2, 0, 524298, 2, 0, 524299, 2, 0, 524300, 2, 0, 524301, 2, 0, 524302, 2, 0, 524303, 2, 0, 524304, 2, 0, 524305, 2, 0, 524306, 2, 0, 524307, 2, 0, 524308, 2, 0, 524309, 0, 0, 589832, 0, 0, 589833, 2, 0, 589834, 2, 0, 589835, 2, 0, 589836, 2, 0, 589837, 2, 0, 589838, 2, 0, 589839, 2, 0, 589840, 2, 0, 589841, 2, 0, 589842, 2, 0, 589843, 2, 0, 589844, 2, 0, 589845, 0, 0, 655368, 0, 0, 655369, 2, 0, 655370, 2, 0, 655371, 2, 0, 655372, 2, 0, 655373, 2, 0, 655374, 2, 0, 655375, 2, 0, 655376, 2, 0, 655377, 2, 0, 655378, 2, 0, 655379, 2, 0, 655380, 2, 0, 655381, 0, 0, 720904, 0, 0, 720905, 2, 0, 720906, 2, 0, 720907, 2, 0, 720908, 2, 0, 720909, 2, 0, 720910, 2, 0, 720911, 2, 0, 720912, 2, 0, 720913, 2, 0, 720914, 2, 0, 720915, 2, 0, 720916, 2, 0, 720917, 0, 0, 786440, 0, 0, 786441, 2, 0, 786442, 2, 0, 786443, 2, 0, 786444, 2, 0, 786445, 2, 0, 786446, 2, 0, 786447, 2, 0, 786448, 2, 0, 786449, 2, 0, 786450, 2, 0, 786451, 2, 0, 786452, 2, 0, 786453, 0, 0, 851976, 0, 0, 851977, 2, 0, 851978, 2, 0, 851979, 2, 0, 851980, 2, 0, 851981, 2, 0, 851982, 2, 0, 851983, 2, 0, 851984, 2, 0, 851985, 2, 0, 851986, 2, 0, 851987, 2, 0, 851988, 2, 0, 851989, 0, 0, 917512, 0, 0, 917513, 0, 0, 917514, 0, 0, 917515, 0, 0, 917516, 0, 0, 917517, 0, 0, 917518, 0, 0, 917519, 0, 0, 917520, 0, 0, 917521, 0, 0, 917522, 0, 0, 917523, 0, 0, 917524, 0, 0, 917525, 0, 0 )
+tile_data = PoolIntArray( 458763, 0, 0, 458764, 0, 0, 458765, 0, 0, 458766, 0, 0, 458767, 0, 0, 458768, 0, 0, 458769, 0, 0, 458770, 0, 0, 524298, 0, 0, 524299, 0, 0, 524300, 2, 0, 524301, 2, 0, 524302, 2, 0, 524303, 2, 0, 524304, 2, 0, 524305, 2, 0, 524306, 0, 0, 524307, 0, 0, 589832, 0, 0, 589833, 0, 0, 589834, 0, 0, 589835, 2, 0, 589836, 2, 0, 589837, 2, 0, 589838, 2, 0, 589839, 2, 0, 589840, 2, 0, 589841, 2, 0, 589842, 2, 0, 589843, 0, 0, 589844, 0, 0, 589845, 0, 0, 655367, 0, 0, 655368, 0, 0, 655369, 2, 0, 655370, 2, 0, 655371, 2, 0, 655372, 2, 0, 655373, 2, 0, 655374, 2, 0, 655375, 2, 0, 655376, 2, 0, 655377, 2, 0, 655378, 2, 0, 655379, 2, 0, 655380, 2, 0, 655381, 0, 0, 655382, 0, 0, 720903, 0, 0, 720904, 2, 0, 720905, 2, 0, 720906, 2, 0, 720907, 2, 0, 720908, 2, 0, 720909, 2, 0, 720910, 2, 0, 720911, 2, 0, 720912, 2, 0, 720913, 2, 0, 720914, 2, 0, 720915, 2, 0, 720916, 2, 0, 720917, 2, 0, 720918, 0, 0, 786439, 0, 0, 786440, 2, 0, 786441, 2, 0, 786442, 2, 0, 786443, 2, 0, 786444, 2, 0, 786445, 2, 0, 786446, 2, 0, 786447, 2, 0, 786448, 2, 0, 786449, 2, 0, 786450, 2, 0, 786451, 2, 0, 786452, 2, 0, 786453, 2, 0, 786454, 0, 0, 851975, 0, 0, 851976, 2, 0, 851977, 2, 0, 851978, 2, 0, 851979, 2, 0, 851980, 2, 0, 851981, 2, 0, 851982, 2, 0, 851983, 2, 0, 851984, 2, 0, 851985, 2, 0, 851986, 2, 0, 851987, 2, 0, 851988, 2, 0, 851989, 2, 0, 851990, 0, 0, 917511, 0, 0, 917512, 2, 0, 917513, 2, 0, 917514, 2, 0, 917515, 2, 0, 917516, 2, 0, 917517, 2, 0, 917518, 2, 0, 917519, 2, 0, 917520, 2, 0, 917521, 2, 0, 917522, 2, 0, 917523, 2, 0, 917524, 2, 0, 917525, 2, 0, 917526, 0, 0, 983047, 0, 0, 983048, 2, 0, 983049, 2, 0, 983050, 2, 0, 983051, 2, 0, 983052, 2, 0, 983053, 2, 0, 983054, 2, 0, 983055, 2, 0, 983056, 2, 0, 983057, 2, 0, 983058, 2, 0, 983059, 2, 0, 983060, 2, 0, 983061, 2, 0, 983062, 0, 0, 1048583, 0, 0, 1048584, 0, 0, 1048585, 2, 0, 1048586, 2, 0, 1048587, 2, 0, 1048588, 2, 0, 1048589, 2, 0, 1048590, 2, 0, 1048591, 2, 0, 1048592, 2, 0, 1048593, 2, 0, 1048594, 2, 0, 1048595, 2, 0, 1048596, 2, 0, 1048597, 0, 0, 1048598, 0, 0, 1114120, 0, 0, 1114121, 0, 0, 1114122, 0, 0, 1114123, 2, 0, 1114124, 2, 0, 1114125, 2, 0, 1114126, 2, 0, 1114127, 2, 0, 1114128, 2, 0, 1114129, 2, 0, 1114130, 2, 0, 1114131, 0, 0, 1114132, 0, 0, 1114133, 0, 0, 1179658, 0, 0, 1179659, 0, 0, 1179660, 2, 0, 1179661, 2, 0, 1179662, 2, 0, 1179663, 2, 0, 1179664, 2, 0, 1179665, 2, 0, 1179666, 0, 0, 1179667, 0, 0, 1245195, 0, 0, 1245196, 0, 0, 1245197, 0, 0, 1245198, 0, 0, 1245199, 0, 0, 1245200, 0, 0, 1245201, 0, 0, 1245202, 0, 0 )
 __meta__ = {
 "_edit_lock_": true
 }
@@ -809,11 +843,10 @@ end_cap_mode = 2
 [node name="Units" type="YSort" parent="."]
 
 [node name="Unit" parent="Units" instance=ExtResource( 3 )]
-position = Vector2( 184, 200 )
+self_modulate = Color( 0.211765, 0.211765, 1, 1 )
+position = Vector2( 216, 296 )
 
 [node name="Unit2" parent="Units" instance=ExtResource( 3 )]
 self_modulate = Color( 1, 0.211765, 0.211765, 1 )
-position = Vector2( 296, 136 )
+position = Vector2( 264, 136 )
 affiliation = "Enemy"
-
-[connection signal="pressed" from="UI/PrepMenu/VBoxContainer/AtttackBtn" to="." method="_on_AtttackBtn_pressed"]

@@ -33,9 +33,9 @@ func battle(unit1, unit2):
 	unit1.attack(unit2)
 	yield(unit1, "attack_done")
 	
-	# check if unit has died and combat is over!
+	# check if unit should be dead, then give them death and combat is over!
 	if unit2.queuedForDeath:
-		unit2.queue_free()
+		unit2.death()
 		disconnectCombatUI(unit1, unit2)
 		emit_signal("combat_done")
 		return
@@ -44,9 +44,9 @@ func battle(unit1, unit2):
 	unit2.attack(unit1)
 	yield(unit2, "attack_done")
 	
-	# check if unit has died, only to queue_free
+	# check if unit should be dead, then give them death
 	if unit1.queuedForDeath:
-		unit1.queue_free()
+		unit1.death()
 	disconnectCombatUI(unit1, unit2)
 	#combat has finished!
 	emit_signal("combat_done")
