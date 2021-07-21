@@ -2,6 +2,7 @@ extends Node
 signal combat_done
 
 onready var combatUI = get_node("/root/Game/UI/Combat")
+var combatCancelled = false
 
 # UnitProcessor handles any engagements in combat and unit abilities.
 # so yes, FIRE EMBLEM DANCING IS COMBAT
@@ -23,9 +24,34 @@ onready var combatUI = get_node("/root/Game/UI/Combat")
 
 # Engage in a normal field battle
 # Unit1 is assumed to be the initial attacker
-# Unit2 will *ALWAYS* be able to counterattack
+# Unit2 will *ALWAYS* be able to counterattack... Unless they die (gasp)!
 # Combat goes to end state when 1. either unit dies and/or 2. Both units have attacked
 func battle(unit1, unit2):
+	connectCombatUI(unit1, unit2)
+	
+	#first attack
+	unit1.attack(unit2)
+	yield(unit1, "attack_done")
+	
+	# check if unit has died and combat is over!
+	if unit2.queuedForDeath:
+		unit2.queue_free()
+		disconnectCombatUI(unit1, unit2)
+		emit_signal("combat_done")
+		return
+	
+	#next one
+	unit2.attack(unit1)
+	yield(unit2, "attack_done")
+	
+	# check if unit has died, only to queue_free
+	if unit1.queuedForDeath:
+		unit1.queue_free()
+	disconnectCombatUI(unit1, unit2)
+	#combat has finished!
+	emit_signal("combat_done")
+
+func connectCombatUI(unit1, unit2):
 	combatUI.show()
 	if unit1.affiliation == "Player":
 		combatUI.setPlayerUnit(unit1)
@@ -41,19 +67,8 @@ func battle(unit1, unit2):
 		combatUI.setPlayerUnit(unit2)
 		unit2.connect("damage_taken", combatUI, "setPlayerUnit")
 	
-	#first animation
-	#unit2.get_node("HealthUI").show()
-	unit1.attack(unit2)
-	yield(unit1, "attack_done")
-	#unit2.get_node("HealthUI").hide()
-	
-	#next one
-	#unit1.get_node("HealthUI").show()
-	unit2.attack(unit1)
-	yield(unit2, "attack_done")
-	#unit1.get_node("HealthUI").hide()
-	
-	
+
+func disconnectCombatUI(unit1, unit2):
 	if unit1.affiliation == "Player":
 		unit1.disconnect("damage_taken", combatUI, "setPlayerUnit")
 	else:
@@ -64,5 +79,3 @@ func battle(unit1, unit2):
 	else:
 		unit2.disconnect("damage_taken", combatUI, "setPlayerUnit")
 	combatUI.hide()
-	#resume!
-	emit_signal("combat_done")

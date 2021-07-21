@@ -60,7 +60,6 @@ func getGridOriginv():
 func addUnit(var unit):
 	unit.grid = self
 	unit.cellPos = tileMap.world_to_map(unit.position) - gridRect.position
-	print("Adding Unit. Cell Pos : ", unit.cellPos)
 	var cellId = unit.cellPos.x + (gridRect.size.x * unit.cellPos.y)
 	if unit.affiliation == "Enemy":
 		astar.set_point_disabled(cellId, true)
@@ -71,16 +70,22 @@ func getUnit(var cellPos):
 
 func moveUnit(var unit, var newCellPos):
 	#reset old
-	var cellId = unit.cellPos.x + (gridRect.size.x * unit.cellPos.y)
-	unitGrid[cellId] = null
-	if unit.affiliation == "Enemy":
-		astar.set_point_disabled(cellId, false)
+	removeUnit(unit)
 	#set new
 	unit.cellPos = newCellPos
-	cellId = unit.cellPos.x + (gridRect.size.x * unit.cellPos.y)
+	var cellId = unit.cellPos.x + (gridRect.size.x * unit.cellPos.y)
 	if unit.affiliation == "Enemy":
 		astar.set_point_disabled(cellId, true)
 	unitGrid[cellId] = unit
+
+func removeUnit(var unit):
+	var cellId = unit.cellPos.x + (gridRect.size.x * unit.cellPos.y)
+	if unit.affiliation == "Enemy":
+		astar.set_point_disabled(cellId, false)
+	unitGrid[cellId] = null
+	
+	unit.grid = null
+	unit.cellPos = Vector2()
 
 #takes in world based positions [32, 64] or [78.5, 54.2]
 func getPathv(cellPosv1, cellPosv2):
