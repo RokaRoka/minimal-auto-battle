@@ -36,6 +36,10 @@ signal turn_done(unit)
 func _ready():
 	# set group for affiliation
 	add_to_group(affiliation)
+	if affiliation == "Player":
+		self_modulate = Color.blue
+	elif affiliation == "Enemy":
+		self_modulate = Color.red
 
 func _process(delta):
 	if moving:

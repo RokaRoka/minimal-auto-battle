@@ -6,6 +6,7 @@ var unitTscn = preload("res://Unit/Unit.tscn")
 onready var grid = $Grid
 onready var phaseAnimPlayer = $UI/Phase/AnimationPlayer
 onready var prepUI = $UI/PrepMenu
+onready var bench = $UI/Bench
 
 var turn = "prep"
 var turnQueue := []
@@ -20,8 +21,6 @@ func _ready():
 	for unit in $Units.get_children():
 		grid.addUnit(unit)
 	prepTurn()
-	#for testing shop
-	$UI/Bench/Panel/UnitSlot1/ShopUnit.connect("dropped", self, "dropShopUnit")
 
 func prepTurn():
 	turn = "prep"
@@ -104,6 +103,14 @@ func finishPlayerTurn(victory):
 		unit.reset()
 		unit.disconnect("turn_done", self, "nextUnitTurn")
 	# add unit to player bench
+	var newUnit = bench.createShopUnit()
+	newUnit.connect("dropped", self, "dropShopUnit")
+	bench.addShopUnit(newUnit)
+	
+	# add enemy unit to field
+	var enemyWorldPos = grid.tileMap.map_to_world(curRound.nextEnemyPosition())
+	spawnUnit(enemyWorldPos, "Enemy")
+	
 	# increment round
 	curRound.increment()
 	$UI/PlayerStats/RoundNum.text = str("Round ", curRound.num)
@@ -129,13 +136,18 @@ func dropShopUnit(draggable):
 	var mousePos = get_global_mouse_position()
 	#check if its a valid space
 	var cellId = grid.getCellId(mousePos)
-#	if grid.getTileName(cellId) != "walkable":
-#		return
+	if grid.getTileName(cellId) != "Walkable":
+		draggable.rect_position = draggable.beforeDragPos
+		return
 	
 	draggable.hide()
+	spawnUnit(mousePos, "Player")
+
+func spawnUnit(pos: Vector2, affiliation: String):
 	#create unit and add to grid
 	var newUnit = unitTscn.instance()
-	newUnit.position = grid.getSnappedPosv(mousePos) + grid.tileMap.cell_size/2
+	newUnit.affiliation = affiliation
+	newUnit.position = grid.getSnappedPosv(pos) + grid.tileMap.cell_size/2
 	grid.addUnit(newUnit)
 	$Units.add_child(newUnit)
 
@@ -150,11 +162,14 @@ func _on_AtttackBtn_pressed():
 class Round:
 	var num := 1
 	var maxEnemies := 2
-	var enemyPositions := [Vector2(16, 5), Vector2(13, 5)]
+	var enemyPositions := [Vector2(16, 8), Vector2(13, 8)]
 
 	func _init():
 		pass
 
 	func increment():
 		num += 1
-		
+	
+	func nextEnemyPosition():
+		if num < maxEnemies:
+			return enemyPositions[num]

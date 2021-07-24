@@ -1,19 +1,18 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://Grid.gd" type="Script" id=1]
 [ext_resource path="res://Tiles/TileSet.tres" type="TileSet" id=2]
 [ext_resource path="res://Unit/Unit.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Phases/Combat/Combat.gd" type="Script" id=4]
 [ext_resource path="res://Game.gd" type="Script" id=5]
-[ext_resource path="res://icon.png" type="Texture" id=6]
-[ext_resource path="res://Phases/Prep/Draggable.gd" type="Script" id=7]
 [ext_resource path="res://Fonts/details_font.tres" type="DynamicFont" id=8]
 [ext_resource path="res://UI_Theme.tres" type="Theme" id=9]
 [ext_resource path="res://Phases/Prep/StatPreview.gd" type="Script" id=10]
 [ext_resource path="res://Fonts/header1.tres" type="DynamicFont" id=11]
 [ext_resource path="res://Fonts/header2.tres" type="DynamicFont" id=12]
+[ext_resource path="res://Phases/Prep/Bench.gd" type="Script" id=13]
 
-[sub_resource type="StyleBoxFlat" id=4]
+[sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0, 0, 0, 1 )
 border_width_left = 1
 border_width_top = 1
@@ -21,8 +20,7 @@ border_width_right = 1
 border_width_bottom = 1
 border_blend = true
 
-[sub_resource type="Animation" id=1]
-resource_name = "Combat"
+[sub_resource type="Animation" id=2]
 length = 0.8
 tracks/0/type = "value"
 tracks/0/path = NodePath("TakeTurn:modulate")
@@ -85,8 +83,7 @@ tracks/4/keys = {
 "values": [ Vector2( 192, 8 ) ]
 }
 
-[sub_resource type="Animation" id=2]
-resource_name = "Prep"
+[sub_resource type="Animation" id=3]
 length = 0.8
 tracks/0/type = "value"
 tracks/0/path = NodePath("TakeTurn:modulate")
@@ -149,7 +146,7 @@ tracks/4/keys = {
 "values": [ Vector2( 240, 8 ) ]
 }
 
-[sub_resource type="StyleBoxLine" id=3]
+[sub_resource type="StyleBoxLine" id=4]
 color = Color( 1, 1, 1, 1 )
 grow_begin = 0.0
 grow_end = 0.0
@@ -169,7 +166,7 @@ anchor_right = 1.0
 margin_left = -97.0
 margin_bottom = 76.0
 theme = ExtResource( 9 )
-custom_styles/panel = SubResource( 4 )
+custom_styles/panel = SubResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -196,21 +193,21 @@ __meta__ = {
 margin_top = 18.0
 margin_right = 97.0
 margin_bottom = 34.0
-custom_styles/normal = SubResource( 4 )
+custom_styles/normal = SubResource( 1 )
 text = "Attack Castle"
 
 [node name="ShopBtn" type="Button" parent="UI/PrepMenu/VBoxContainer"]
 margin_top = 38.0
 margin_right = 97.0
 margin_bottom = 54.0
-custom_styles/normal = SubResource( 4 )
+custom_styles/normal = SubResource( 1 )
 text = "Go Shopping"
 
 [node name="StayBtn" type="Button" parent="UI/PrepMenu/VBoxContainer"]
 margin_top = 58.0
 margin_right = 97.0
 margin_bottom = 74.0
-custom_styles/normal = SubResource( 4 )
+custom_styles/normal = SubResource( 1 )
 text = "Stay"
 
 [node name="Phase" type="Control" parent="UI"]
@@ -221,8 +218,8 @@ __meta__ = {
 }
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="UI/Phase"]
-anims/Combat = SubResource( 1 )
-anims/Prep = SubResource( 2 )
+anims/Combat = SubResource( 2 )
+anims/Prep = SubResource( 3 )
 
 [node name="TakeTurn" type="Label" parent="UI/Phase"]
 margin_left = 16.0
@@ -241,7 +238,7 @@ margin_left = -16.0
 margin_top = 32.0
 margin_right = 176.0
 margin_bottom = 40.0
-custom_styles/separator = SubResource( 3 )
+custom_styles/separator = SubResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -295,6 +292,7 @@ margin_top = 360.0
 margin_right = 480.0
 margin_bottom = 480.0
 theme = ExtResource( 9 )
+script = ExtResource( 13 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -307,16 +305,6 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="UI/Bench/Panel"]
-margin_left = 8.0
-margin_top = 4.0
-margin_right = 48.0
-margin_bottom = 18.0
-text = "Bench"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="UnitSlot1" type="Panel" parent="UI/Bench/Panel"]
 margin_left = 32.0
 margin_top = 24.0
@@ -325,23 +313,6 @@ margin_bottom = 56.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_styles/panel = SubResource( 5 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="ShopUnit" type="TextureRect" parent="UI/Bench/Panel/UnitSlot1" groups=[
-"UnitUI",
-]]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 4.0
-margin_top = 4.0
-margin_right = -4.0
-margin_bottom = -4.0
-texture = ExtResource( 6 )
-expand = true
-stretch_mode = 6
-script = ExtResource( 7 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -438,6 +409,16 @@ margin_bottom = 56.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_styles/panel = SubResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="UI/Bench/Panel"]
+margin_left = 8.0
+margin_top = 4.0
+margin_right = 53.0
+margin_bottom = 18.0
+text = "Bench"
 __meta__ = {
 "_edit_use_anchors_": false
 }

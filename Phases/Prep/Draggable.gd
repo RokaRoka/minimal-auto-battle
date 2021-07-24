@@ -1,6 +1,7 @@
 extends TextureRect
 
 var dragging = false
+onready var beforeDragPos: Vector2 = rect_position
 
 signal started_drag( draggable )
 signal dropped( draggable )
@@ -17,5 +18,6 @@ func _on_gui_input(event:InputEvent):
 		elif dragging:
 			dragging = false
 			emit_signal("dropped", self)
+			beforeDragPos = rect_position
 	if event is InputEventMouseMotion and dragging:
 		rect_position += event.relative
