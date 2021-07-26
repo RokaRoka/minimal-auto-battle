@@ -149,6 +149,8 @@ func getCrit():
 	return (skl/2) + 2 # weapon crit magic num
 
 func attack(other: Unit):
+	highlight()
+	
 	# TODO change this for atk vs mag depending on weapon
 	var damage = atk + 7 # weapon damage magic num
 	var hit = getHit()
@@ -187,12 +189,13 @@ func takeDamage(dmg):
 	
 		#damage animation!
 		$"2DShaker".hShake()
+		$"2DShaker".connect("shakeDone", $DmgUI, "playHit", [dmg], CONNECT_ONESHOT)
 		
 		#DEATH!!!!!!
 		if currHp <= 0:
 			print("> 'oh no... go on... without meeeeee. (dead)'")
 			queuedForDeath = true
-	var timer = get_tree().create_timer(1.0)
+	var timer = get_tree().create_timer(1.5)
 	timer.connect("timeout", self, "emit_signal", ["damage_taken_done"], CONNECT_ONESHOT)
 #	if queuedForDeath:
 #		timer.connect("timeout", self, "emit_signal", ["died"])
@@ -212,6 +215,9 @@ func reset():
 	grid.addUnit(self)
 	currHp = hp
 	show()
+
+func highlight():
+	$TileHighlight.blink()
 
 func _on_mouse_entered():
 	get_node("/root/Game/UI/StatPreview").setStats(self)

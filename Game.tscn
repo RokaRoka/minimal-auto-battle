@@ -662,7 +662,7 @@ __meta__ = {
 }
 
 [node name="Player" type="Panel" parent="UI/Combat"]
-self_modulate = Color( 0.256882, 0.666645, 0.722656, 1 )
+self_modulate = Color( 0, 0.25098, 1, 1 )
 margin_left = 8.0
 margin_top = 8.0
 margin_right = 232.0
@@ -676,6 +676,9 @@ margin_left = 8.0
 margin_top = 8.0
 margin_right = 40.0
 margin_bottom = 24.0
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 2
+custom_constants/line_spacing = 2
 text = "HP"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -731,7 +734,7 @@ __meta__ = {
 }
 
 [node name="Enemy" type="Panel" parent="UI/Combat"]
-self_modulate = Color( 1, 0.380392, 0.380392, 1 )
+self_modulate = Color( 1, 0.156863, 0.156863, 1 )
 margin_left = 248.0
 margin_top = 8.0
 margin_right = 472.0
