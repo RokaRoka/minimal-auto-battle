@@ -116,6 +116,9 @@ func takeTurn():
 		emit_signal("turn_done")
 		return
 	
+	while targets.size() > 0 and targets.front() == null:
+		targets.pop_front()
+	
 	if targets.empty():
 		findTarget()
 	
@@ -220,11 +223,11 @@ func highlight():
 	$TileHighlight.blink()
 
 func _on_mouse_entered():
-	get_node("/root/Game/UI/StatPreview").setStats(self)
+	pass #get_node("/root/Game/UI/StatPreview").setStats(self)
 
 
 func _on_mouse_exited():
-	get_node("/root/Game/UI/StatPreview").hide()
+	pass #get_node("/root/Game/UI/StatPreview").hideStats()
 
 func _exit_tree():
 	if grid != null:

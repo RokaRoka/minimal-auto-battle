@@ -156,13 +156,13 @@ func getCellId(pos):
 func getTileName(id):
 	return tileMap.tile_set.tile_get_name(id)
 
-# for when we are attacking enemies
-func getClosestToCellPos(curPos, targetPos, moveLimit = -1):
+# for when we wanna be next to a grid space c:
+func getClosestToCellPos(curPos, targetPos, moveLimit):
 	#var diff = targetPos.distance_squared_to(curPos)
 	var dirs = [Vector2.DOWN, Vector2.UP, Vector2.LEFT, Vector2.RIGHT]
 	var finalDirs = []
 	
-	# remove literally unreachable locations (down, up, left, and right) of target
+	# remove any unreachable locations (down, up, left, and right) of target
 	for i in range(0, 4):
 		var pos = targetPos + dirs[i]
 		var cell = tileMap.get_cell(pos.x + gridRect.position.x, pos.y + gridRect.position.y)
@@ -170,17 +170,22 @@ func getClosestToCellPos(curPos, targetPos, moveLimit = -1):
 		if tiletype == "Walkable" and getUnit(pos) == null:
 			finalDirs.append(dirs[i])
 	
+	var closest = Vector2(-1, -1)
+	for i in range(0, finalDirs.size()):
+		var pos = targetPos + finalDirs[i]
+		var dist = curPos - pos
+		var dist2 = curPos - closest
+		if closest == Vector2(-1, -1) or (abs(dist.x) + abs(dist.y)) < (abs(dist2.x) + abs(dist2.y)):
+			closest = targetPos + finalDirs[i]
 	
-	if moveLimit > -1:
-		for i in range(0, finalDirs.size()):
-			var pos = targetPos + finalDirs[i]
-			var dist = curPos - pos
-			if moveLimit >= (abs(dist.x) + abs(dist.y)):
-				print("closest: ", targetPos + finalDirs[i])
-				return targetPos + finalDirs[i]
+	if closest != Vector2(-1, -1):
+		print("closest (found closest): ", closest)
+		return closest
 	
-	print("closest: ", targetPos + finalDirs.front())
-	return targetPos + finalDirs.front()
+	# return the current pos for now. In the future we may want to
+	# return "null" or empty Vec2 to let the caller know the function f'd up
+	print("closest (current pos): ", curPos)
+	return curPos
 	
 	# AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH
 #	if sign(diff.x) > 0:
